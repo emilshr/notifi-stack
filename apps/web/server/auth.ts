@@ -4,7 +4,7 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-  Session,
+  type Session,
 } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { prisma } from "./db";
@@ -72,6 +72,6 @@ export const authOptions: NextAuthOptions = {
 export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
-}) => {
+}): Promise<Session | null> => {
   return getServerSession(ctx.req, ctx.res, authOptions);
 };

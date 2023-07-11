@@ -1,10 +1,13 @@
 import { Button, Header } from "ui";
 import { appRouter } from "../server/trpc-server";
+import { authOptions } from "../server/auth";
+import { getServerSession } from "next-auth";
+import { prisma } from "../server/db";
 
 export default async function Page() {
-  const caller = appRouter.createCaller({});
+  const session = await getServerSession(authOptions);
+  const caller = appRouter.createCaller({ prisma, session });
   const result = await caller.userById(1);
-  console.log({ result });
   return (
     <>
       <Header text="Web" />

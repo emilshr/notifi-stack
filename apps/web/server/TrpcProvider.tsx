@@ -4,7 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
-import { trpc } from "./trpc";
+import { trpc } from "./trpc-client";
 import superJson from "superjson";
 
 export const AppContextProviders: React.FC<{ children: React.ReactNode }> = ({
