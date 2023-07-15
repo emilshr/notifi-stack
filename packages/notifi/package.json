@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "private": false,
   "issues": "https://github.com/emilshr/notifi-stack/issues",
-  "homepage": "https://github.com/emilshr/notifi-stack",
+  "homepage": "https://github.com/emilshr/notifi-stack/tree/main/packages/notifi",
   "files": [
     "dist/**"
   ],
