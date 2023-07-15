@@ -1,11 +1,20 @@
 {
-  "name": "notifi",
+  "name": "@emilshr/notifi",
   "version": "0.0.1",
-  "description": "A wrapper for your react application that can monitor and give you an analysis on the app traffic ",
+  "description": "A wrapper for your react application that can monitor and give you an analysis on the app traffic",
   "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "private": false,
+  "issues": "https://github.com/emilshr/notifi-stack/issues",
+  "homepage": "https://github.com/emilshr/notifi-stack",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs --dts",
+    "build": "tsup --config ./tsup.config.ts",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "eslint 'src/**/*.ts*'",
     "dev": "npm run build -- --watch"
   },
   "keywords": [
