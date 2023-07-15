@@ -1,5 +1,11 @@
 # @emilshr/notifi
 
+## 0.3.0
+
+### Minor Changes
+
+- Updating github repository URL
+
 ## 0.2.0
 
 ### Minor Changes
