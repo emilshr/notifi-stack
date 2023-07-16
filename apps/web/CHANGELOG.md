@@ -1,5 +1,12 @@
 # web
 
+## 1.0.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @emilshr/notifi@0.3.1
+
 ## 1.0.3
 
 ### Patch Changes

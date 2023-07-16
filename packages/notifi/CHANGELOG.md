@@ -1,5 +1,11 @@
 # @emilshr/notifi
 
+## 0.3.1
+
+### Patch Changes
+
+- Patch update to test version updates
+
 ## 0.3.0
 
 ### Minor Changes
