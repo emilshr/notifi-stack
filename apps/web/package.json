@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "pnpx prisma generate",
+    "postinstall": "pnpx prisma generate schema=./prisma/schema.prisma",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
