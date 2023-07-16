@@ -19,5 +19,8 @@
       "inputs": ["*.prisma"],
       "persistent": false
     }
+  },
+  "remoteCache": {
+    "signature": true
   }
 }
