@@ -48,7 +48,7 @@ jobs:
       - name: Install dependencies
         run: pnpm --filter='@emilshr/*' install
 
-      - name: Create release pull request
+      - name: Publish packages with Changeset
         uses: changesets/action@v1
         with:
           publish: pnpm publish-packages
