@@ -80,7 +80,7 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 export const publicProcedure = t.procedure;
 
 export const appRouter = t.router({
-  userById: protectedProcedure.input(z.number()).query((req) => {
+  userById: publicProcedure.input(z.number()).query((req) => {
     const { input } = req;
     return userList.find((u) => parseInt(u.id) === input);
   }),

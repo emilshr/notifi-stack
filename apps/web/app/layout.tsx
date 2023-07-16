@@ -1,5 +1,4 @@
-import { NotifiWrapper } from "@emilshr/notifi";
-import { AppContextProviders } from "../server/TrpcProvider";
+import { AppContextProviders } from "./TrpcProvider";
 
 export default function RootLayout({
   children,
@@ -8,11 +7,9 @@ export default function RootLayout({
 }) {
   return (
     <AppContextProviders>
-      <NotifiWrapper>
-        <html lang="en">
-          <body>{children}</body>
-        </html>
-      </NotifiWrapper>
+      <html lang="en">
+        <body>{children}</body>
+      </html>
     </AppContextProviders>
   );
 }

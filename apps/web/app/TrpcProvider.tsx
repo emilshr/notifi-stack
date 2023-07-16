@@ -6,6 +6,7 @@ import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import { trpc } from "./trpc-client";
 import superJson from "superjson";
+import { NotifiWrapper } from "@emilshr/notifi";
 
 export const AppContextProviders: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -25,7 +26,7 @@ export const AppContextProviders: React.FC<{ children: React.ReactNode }> = ({
     <SessionProvider>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          {children}
+          <NotifiWrapper>{children}</NotifiWrapper>
         </QueryClientProvider>
       </trpc.Provider>
     </SessionProvider>

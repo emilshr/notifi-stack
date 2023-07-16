@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-const config = {
+module.exports = {
   reactStrictMode: true,
-  transpilePackages: ["ui", "db"],
+  transpilePackages: ["ui", "db", "@emilshr/notifi"]
 };
-
-module.exports = config;
