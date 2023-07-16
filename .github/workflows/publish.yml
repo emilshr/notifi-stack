@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  actions: write
+  pull-requests: write
+  contents: write
+
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
@@ -12,23 +17,33 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
 
-    permissions:
-      actions: write
-      pull-requests: write
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
           version: 8.6.7
 
-      - name: Setup Node.js 20
-        uses: actions/setup-node@v3
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setting up pnpm cache
+        uses: actions/cache@v3
         with:
-          node-version: 20
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
         run: pnpm --filter='@emilshr/*' install
