@@ -27,6 +27,8 @@ jobs:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
           scope: "@emilshr"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.0.1
