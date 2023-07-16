@@ -24,7 +24,9 @@ jobs:
       - name: Setup Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: "20.x"
+          registry-url: "https://registry.npmjs.org"
+          scope: "@emilshr"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.0.1
