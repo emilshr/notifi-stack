@@ -6,7 +6,7 @@
     "dev": "dotenv -e .env turbo dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "publish-packages": "turbo run lint build --filter='@emilshr/notifi' && changeset publish"
+    "publish-packages": "pnpx turbo run lint build --filter='@emilshr/*' && changeset publish"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.7",
