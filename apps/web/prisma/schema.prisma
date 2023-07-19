@@ -22,7 +22,7 @@ model Example {
 
 // Necessary for Next auth
 model Account {
-    id                       String  @id @default(cuid())
+    id                       String    @id @default(cuid())
     userId                   String
     type                     String
     provider                 String
@@ -35,7 +35,8 @@ model Account {
     id_token                 String? // @db.Text
     session_state            String?
     refresh_token_expires_in Int?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    user                     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Project                  Project[]
 
     @@unique([provider, providerAccountId])
 }
@@ -56,6 +57,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
+    Project       Project[]
 }
 
 model VerificationToken {
@@ -64,4 +66,15 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Project {
+    id              String   @id @default(cuid())
+    name            String
+    userId          String
+    projectPublicId String   @unique()
+    projectSecret   String
+    user            User     @relation(fields: [userId], references: [id])
+    Account         Account? @relation(fields: [accountId], references: [id])
+    accountId       String?
 }

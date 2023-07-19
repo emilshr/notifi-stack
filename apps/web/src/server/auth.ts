@@ -4,9 +4,9 @@ import {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-  type Session,
 } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import { env } from "@/env.mjs";
 import { prisma } from "./db";
 
 /**
@@ -17,17 +17,10 @@ import { prisma } from "./db";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
+    user: DefaultSession["user"] & {
       id: string;
-      // ...other properties
-      // role: UserRole;
-    } & DefaultSession["user"];
+    };
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -45,12 +38,12 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  secret: process.env.NEXTAUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
     /**
      * ...add more providers here.
@@ -72,6 +65,6 @@ export const authOptions: NextAuthOptions = {
 export const getServerAuthSession = (ctx: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
-}): Promise<Session | null> => {
+}) => {
   return getServerSession(ctx.req, ctx.res, authOptions);
 };
