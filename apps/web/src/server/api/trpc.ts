@@ -11,13 +11,14 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
-import { ZodError } from "zod";
+import { z, ZodError, ZodObject } from "zod";
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
 import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
 import { IncomingMessage } from "http";
 import ws from "ws";
 import { getSession } from "next-auth/react";
+import { paginatedInputSchema } from "@/common/zodSchema";
 
 /**
  * 1. CONTEXT
@@ -146,3 +147,9 @@ export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 export const publicSubscription = publicProcedure.subscription;
 
 export const protectedSubscription = protectedProcedure.subscription;
+
+export const paginatedPrivateProcedure =
+  protectedProcedure.input(paginatedInputSchema);
+
+export const paginatedPublicProcedure =
+  publicProcedure.input(paginatedInputSchema);
