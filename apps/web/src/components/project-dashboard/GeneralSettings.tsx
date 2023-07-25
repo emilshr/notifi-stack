@@ -1,10 +1,10 @@
 import { Button } from "flowbite-react";
-import { ProjectSectionWrapper } from "../../ProjectSectionWrapper";
 import { TextArea, TextField } from "@/components";
 import { useState } from "react";
 import { api } from "@/utils/api";
 import type { Project } from "@prisma/client";
 import { DeleteProject } from "./DeleteProject";
+import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
 
 type Props = {
   project: Project;

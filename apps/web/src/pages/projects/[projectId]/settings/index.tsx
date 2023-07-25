@@ -9,9 +9,9 @@ import type {
 } from "next";
 import type { ParsedUrlQuery } from "querystring";
 import SuperJSON from "superjson";
-import { SectionHeader } from "../../SectionHeader";
-import { SidePaneWrapper } from "../../SidePaneWrapper";
-import { GeneralSettings } from "./GeneralSettings";
+import { SectionHeader } from "@/components/SectionHeader";
+import { SidePaneWrapper } from "@/components/SidePaneWrapper";
+import { GeneralSettings } from "@/components/project-dashboard/GeneralSettings";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
   projectId: string;

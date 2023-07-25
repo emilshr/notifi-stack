@@ -1,5 +1,5 @@
+import { HomeScreenWidget } from "@/components/project-dashboard/HomeScreenWidget";
 import Head from "next/head";
-import { HomeScreenWidget } from "./HomeScreenWidget";
 
 export default function Home() {
   return (

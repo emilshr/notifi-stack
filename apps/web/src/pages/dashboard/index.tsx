@@ -1,6 +1,6 @@
+import { DashboardHeader } from "@/components/dashboard/header";
+import { ProjectListing } from "@/components/dashboard/ProjectListing";
 import type { NextPage } from "next";
-import { DashboardHeader } from "./header";
-import { ProjectListing } from "./ProjectListing";
 
 const Dashboard: NextPage = () => {
   return (

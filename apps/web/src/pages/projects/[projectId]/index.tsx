@@ -8,11 +8,11 @@ import type {
   InferGetServerSidePropsType,
 } from "next";
 import type { ParsedUrlQuery } from "querystring";
-import { SidePaneWrapper } from "../SidePaneWrapper";
-import { GetStartedAlert } from "./GetStartedAlert";
-import { CreateFirstKeyAlert } from "./CreateFirstKeyAlert";
+import { CreateFirstKeyAlert } from "../../../components/project-dashboard/CreateFirstKeyAlert";
 import type { Project } from "@prisma/client";
-import { SectionHeader } from "../SectionHeader";
+import { SectionHeader } from "@/components/SectionHeader";
+import { SidePaneWrapper } from "@/components/SidePaneWrapper";
+import { GetStartedAlert } from "@/components/project-dashboard/GetStartedAlert";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
   projectId: string;

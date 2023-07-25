@@ -6,10 +6,10 @@ import { createServerSideHelpers } from "@trpc/react-query/server";
 import type { GetServerSidePropsContext } from "next";
 import type { ParsedUrlQuery } from "querystring";
 import SuperJSON from "superjson";
-import { SectionHeader } from "../../SectionHeader";
-import { SidePaneWrapper } from "../../SidePaneWrapper";
-import { ProjectSectionWrapper } from "../../ProjectSectionWrapper";
-import { SetSecret } from "./SetSecret";
+import { SetSecret } from "../../../../components/project-dashboard/SetSecret";
+import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
+import { SectionHeader } from "@/components/SectionHeader";
+import { SidePaneWrapper } from "@/components/SidePaneWrapper";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
   projectId: string;
