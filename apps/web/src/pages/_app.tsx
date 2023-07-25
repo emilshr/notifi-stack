@@ -1,13 +1,13 @@
+import "@/styles/globals.css";
+
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
 import { api } from "@/utils/api";
-import "@/styles/globals.css";
 import { NotifiWrapper } from "@emilshr/notifi";
 import { CustomNavbar } from "@/components/Navbar";
 
 import { Inter } from "next/font/google";
-import { useRouter } from "next/router";
 import { RouteGuard } from "@/components/RouteGuard";
 
 // If loading a variable font, you don't need to specify the font weight
@@ -17,7 +17,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => {
-  console.log({ session });
   return (
     <SessionProvider session={session}>
       <main>

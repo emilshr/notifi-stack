@@ -1,10 +1,10 @@
 import { appRouter } from "@/server/api/root";
 import { createInnerTRPCContext } from "@/server/api/trpc";
 import { getServerAuthSession } from "@/server/auth";
-import { Project } from "@prisma/client";
+import type { Project } from "@prisma/client";
 import { createServerSideHelpers } from "@trpc/react-query/server";
-import { GetServerSidePropsContext } from "next";
-import { ParsedUrlQuery } from "querystring";
+import type { GetServerSidePropsContext } from "next";
+import type { ParsedUrlQuery } from "querystring";
 import SuperJSON from "superjson";
 import { SectionHeader } from "../../SectionHeader";
 import { SidePaneWrapper } from "../../SidePaneWrapper";

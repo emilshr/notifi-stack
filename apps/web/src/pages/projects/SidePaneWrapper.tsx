@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import { ProjectSidePane } from "./ProjectSidePane";
 
 export const SidePaneWrapper = ({ children }: PropsWithChildren) => {

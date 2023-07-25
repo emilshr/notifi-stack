@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { CreateNewProject } from "./CreateNewProjectDialog";
 
 export const DashboardHeader = () => {

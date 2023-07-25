@@ -4,12 +4,7 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import {
-  createWSClient,
-  httpBatchLink,
-  loggerLink,
-  wsLink,
-} from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
@@ -20,10 +15,6 @@ const getBaseUrl = () => {
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
-
-const wsClient = createWSClient({
-  url: "ws://localhost:4001",
-});
 
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
@@ -42,9 +33,6 @@ export const api = createTRPCNext<AppRouter>({
        * @see https://trpc.io/docs/links
        */
       links: [
-        wsLink({
-          client: wsClient,
-        }),
         loggerLink({
           enabled: (opts) =>
             process.env.NODE_ENV === "development" ||

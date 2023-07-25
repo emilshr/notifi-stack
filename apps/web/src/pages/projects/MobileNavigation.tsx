@@ -7,7 +7,7 @@ type Props = {
 
 export const MobileNavigation = ({ currentTab }: Props) => {
   const router = useRouter();
-  const { projectId } = router.query;
+  const { projectId } = router.query as { projectId: string };
   return (
     <div className="flex w-full justify-center pb-4 lg:hidden">
       <Button.Group>

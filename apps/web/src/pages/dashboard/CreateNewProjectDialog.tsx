@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Button, Modal, TextInput, Textarea } from "flowbite-react";
+import { Button, Modal, TextInput, Textarea } from "flowbite-react";
 import { api } from "@/utils/api";
 
 export const CreateNewProject = () => {
@@ -10,9 +10,9 @@ export const CreateNewProject = () => {
   const { projects } = api.useContext();
 
   const { mutate, isLoading } = api.projects.createProject.useMutation({
-    onSuccess(data, variables, context) {
+    onSuccess() {
       setOpen(false);
-      projects.invalidate();
+      projects.getProjects.invalidate();
     },
   });
 

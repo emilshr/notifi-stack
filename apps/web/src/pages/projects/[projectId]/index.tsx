@@ -1,23 +1,17 @@
-import { useRouter } from "next/router";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import { appRouter } from "@/server/api/root";
 import { createInnerTRPCContext } from "@/server/api/trpc";
-import { prisma } from "@/server/db";
 import SuperJSON from "superjson";
 import { getServerAuthSession } from "@/server/auth";
-import {
-  GetServerSideProps,
+import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
-import { api } from "@/utils/api";
-import { ParsedUrlQuery } from "querystring";
-import { ProjectDetails } from "../ProjectDetails";
-import { ProjectSidePane } from "../ProjectSidePane";
+import type { ParsedUrlQuery } from "querystring";
 import { SidePaneWrapper } from "../SidePaneWrapper";
 import { GetStartedAlert } from "./GetStartedAlert";
 import { CreateFirstKeyAlert } from "./CreateFirstKeyAlert";
-import { Project } from "@prisma/client";
+import type { Project } from "@prisma/client";
 import { SectionHeader } from "../SectionHeader";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
@@ -49,8 +43,6 @@ export const getServerSideProps = async ({
     };
   }
 
-  console.log(project);
-
   return {
     props: { project: JSON.parse(JSON.stringify(project)) as Project },
   };
@@ -59,7 +51,6 @@ export const getServerSideProps = async ({
 export default function ProjectView({
   project,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const router = useRouter();
   return (
     <SidePaneWrapper>
       <SectionHeader

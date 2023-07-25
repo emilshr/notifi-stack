@@ -1,5 +1,5 @@
-import { TextInput, Textarea } from "flowbite-react";
-import { ComponentProps } from "react";
+import { Textarea } from "flowbite-react";
+import type { ComponentProps } from "react";
 
 export const TextArea = (props: ComponentProps<typeof Textarea>) => {
   return (

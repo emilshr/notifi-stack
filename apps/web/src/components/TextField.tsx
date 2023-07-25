@@ -1,5 +1,5 @@
 import { TextInput } from "flowbite-react";
-import { ComponentProps } from "react";
+import type { ComponentProps } from "react";
 
 export const TextField = (props: ComponentProps<typeof TextInput>) => {
   return (

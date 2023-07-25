@@ -10,7 +10,7 @@ export const HomeScreenWidget = () => {
             <div className="flex flex-col items-center gap-y-2 md:gap-y-4">
               <h1 className="text-6xl font-black md:text-9xl">Notifi.</h1>
               <span className="text-xs md:text-xl">
-                Control your notifications with{" "}
+                Monitor your web applications with{" "}
                 <div className="rounded-sm bg-slate-200 bg-gradient-to-r from-amber-200 to-yellow-400 bg-clip-text text-center text-lg font-extrabold text-transparent md:inline-block   md:text-2xl">
                   ease
                 </div>

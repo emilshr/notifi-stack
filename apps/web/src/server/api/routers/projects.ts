@@ -54,6 +54,9 @@ export const projectsRouter = createTRPCRouter({
           userId: id,
         },
       });
+      const {} = createdProject;
+      // await prisma.projectApiKeys.create({ data: { projectId, hashedSecret } })
+      // console.log({ createdProject });
       return createdProject;
     }),
   /**
@@ -105,5 +108,55 @@ export const projectsRouter = createTRPCRouter({
       if (foundSecrets.length > 0) {
         // const {} = foundSecrets[0];
       }
+    }),
+  deleteProject: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
+      return await prisma.project.delete({
+        where: { id: projectId },
+        include: { ProjectApiKeys: true },
+      });
+    }),
+  getCurrentSecret: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const foundProject = await prisma.project.findFirst({
+        where: { id: projectId },
+        select: {
+          projectSecret: true,
+        },
+      });
+      if (!foundProject) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Unable to find a secret",
+        });
+      }
+      return foundProject.projectSecret;
+    }),
+  getSecretAndApiKeys: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const foundData = await prisma.projectApiKeys.findMany({
+        where: { projectId },
+        include: { project: true },
+      });
+      if (foundData.length > 0) {
+        if (foundData[0]) {
+          const { project } = foundData[0];
+          const apiKeys = foundData.map(({ hashedSecret, id }) => ({
+            hashedSecret,
+            id,
+          }));
+          return {
+            project,
+            apiKeys,
+          };
+        }
+      }
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Unable to find additional secrets",
+      });
     }),
 });

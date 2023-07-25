@@ -1,9 +1,10 @@
-import { Button, TextInput } from "flowbite-react";
+import { Button } from "flowbite-react";
 import { ProjectSectionWrapper } from "../../ProjectSectionWrapper";
 import { TextArea, TextField } from "@/components";
 import { useState } from "react";
 import { api } from "@/utils/api";
-import { Project } from "@prisma/client";
+import type { Project } from "@prisma/client";
+import { DeleteProject } from "./DeleteProject";
 
 type Props = {
   project: Project;
@@ -68,7 +69,7 @@ export const GeneralSettings = ({ project }: Props) => {
         sectionDescription="The following actions are destructive and cannot be reversed"
       >
         <div className="flex justify-end">
-          <Button color="failure">Delete project</Button>
+          <DeleteProject projectId={project.id} />
         </div>
       </ProjectSectionWrapper>
     </>

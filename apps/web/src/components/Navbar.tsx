@@ -18,7 +18,7 @@ export const CustomNavbar = () => {
           label={
             <Avatar
               alt="User settings"
-              img={data?.user.image || ""}
+              img={data?.user.image ?? ""}
               rounded
               size="xs"
             />

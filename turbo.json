@@ -16,7 +16,11 @@
         "NEXTAUTH_URL",
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET",
-        "NODE_ENV"
+        "NODE_ENV",
+        "SKIP_ENV_VALIDATION",
+        "VERCEL_URL",
+        "VERCEL",
+        "PORT"
       ]
     },
     "lint": {},
@@ -30,7 +34,8 @@
         "NEXTAUTH_URL",
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET",
-        "NODE_ENV"
+        "NODE_ENV",
+        "PORT"
       ]
     },
     "update-schema": {

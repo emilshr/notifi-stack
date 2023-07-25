@@ -11,13 +11,9 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { type Session } from "next-auth";
 import superjson from "superjson";
-import { z, ZodError, ZodObject } from "zod";
+import { ZodError } from "zod";
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
-import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
-import { IncomingMessage } from "http";
-import ws from "ws";
-import { getSession } from "next-auth/react";
 import { paginatedInputSchema } from "@/common/zodSchema";
 
 /**
@@ -64,16 +60,6 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   return createInnerTRPCContext({
     session,
   });
-};
-
-export const createTRPCSocketContext = async (
-  opts: NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
-) => {
-  const session = await getSession(opts);
-  return {
-    session,
-    prisma,
-  };
 };
 
 /**
@@ -144,8 +130,10 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
  */
 export const protectedProcedure = t.procedure.use(enforceUserIsAuthed);
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 export const publicSubscription = publicProcedure.subscription;
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
 export const protectedSubscription = protectedProcedure.subscription;
 
 export const paginatedPrivateProcedure =

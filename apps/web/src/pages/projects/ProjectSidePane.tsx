@@ -5,6 +5,7 @@ import { MobileNavigation } from "./MobileNavigation";
 
 export const ProjectSidePane = () => {
   const router = useRouter();
+  const { projectId } = router.query as { projectId: string };
 
   const paths = (router || "").pathname.split("/");
   const currentTab = paths.length > 0 ? paths[paths.length - 1] : "";
@@ -33,7 +34,7 @@ export const ProjectSidePane = () => {
                 "cursor-pointer font-semibold hover:bg-opacity-75 hover:text-slate-900",
                 currentTab === "[projectId]" ? "" : "text-slate-300",
               ])}
-              onClick={() => router.push(`/projects/${router.query.projectId}`)}
+              onClick={() => router.push(`/projects/${projectId}`)}
             >
               Overview
             </Sidebar.Item>
@@ -43,9 +44,7 @@ export const ProjectSidePane = () => {
                 "cursor-pointer font-semibold hover:bg-opacity-75 hover:text-slate-900",
                 currentTab === "secrets" ? "" : "text-slate-300",
               ])}
-              onClick={() =>
-                router.push(`/projects/${router.query.projectId}/secrets`)
-              }
+              onClick={() => router.push(`/projects/${projectId}/secrets`)}
             >
               Secrets
             </Sidebar.Item>
@@ -55,9 +54,7 @@ export const ProjectSidePane = () => {
                 "cursor-pointer font-semibold hover:bg-opacity-75 hover:text-slate-900",
                 currentTab === "settings" ? "" : "text-slate-300",
               ])}
-              onClick={() =>
-                router.push(`/projects/${router.query.projectId}/settings`)
-              }
+              onClick={() => router.push(`/projects/${projectId}/settings`)}
             >
               Settings
             </Sidebar.Item>

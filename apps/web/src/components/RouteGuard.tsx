@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { Fragment, PropsWithChildren, useEffect } from "react";
+import { Fragment, type PropsWithChildren, useEffect } from "react";
 
 const publicPaths = ["/", "/login", "/about"];
 
@@ -15,7 +15,7 @@ export const RouteGuard = ({ children }: PropsWithChildren) => {
         router.push("/");
       }
     }
-  }, [status]);
+  }, [status, pathname, router]);
 
   return <Fragment>{children}</Fragment>;
 };

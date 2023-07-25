@@ -1,7 +1,4 @@
-import { api } from "@/utils/api";
-import { Project } from "@prisma/client";
-import { NextPage } from "next";
-import { useEffect, useState } from "react";
+import type { NextPage } from "next";
 import { DashboardHeader } from "./header";
 import { ProjectListing } from "./ProjectListing";
 
