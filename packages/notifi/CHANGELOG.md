@@ -1,5 +1,11 @@
 # @emilshr/notifi
 
+## 0.3.2
+
+### Patch Changes
+
+- Removing socket support
+
 ## 0.3.1
 
 ### Patch Changes
