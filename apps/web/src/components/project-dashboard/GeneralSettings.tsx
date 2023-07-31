@@ -5,6 +5,7 @@ import { api } from "@/utils/api";
 import type { Project } from "@prisma/client";
 import { DeleteProject } from "./DeleteProject";
 import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
+import { toast } from "react-toastify";
 
 type Props = {
   project: Project;
@@ -15,9 +16,10 @@ export const GeneralSettings = ({ project }: Props) => {
   const [description, setDescription] = useState(project.description);
   const { isLoading, mutate } = api.projects.updateProject.useMutation({
     onSuccess({ name, description }) {
-      console.log("setting data");
       setName(name);
       setDescription(description);
+      console.log("success");
+      toast.success("Updated project details", { toastId: "project_update" });
     },
   });
 

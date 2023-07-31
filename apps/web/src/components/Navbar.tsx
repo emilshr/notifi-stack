@@ -3,7 +3,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 
 export const CustomNavbar = () => {
-  const { data } = useSession();
+  const { data, status } = useSession();
   return (
     <Navbar
       fluid
@@ -11,36 +11,42 @@ export const CustomNavbar = () => {
     >
       <div className="flex w-full justify-between">
         <Link href="/">
-          <div className="cursor-pointer font-extrabold">Notifi</div>
+          <div className="cursor-pointer font-bold">Notifi</div>
         </Link>
-        <Dropdown
-          inline
-          label={
-            <Avatar
-              alt="User settings"
-              img={data?.user.image ?? ""}
-              rounded
-              size="xs"
-            />
-          }
-        >
-          <Dropdown.Header>
-            <span className="block text-sm">{data?.user.name}</span>
-            <span className="block truncate text-sm font-medium">
-              {data?.user.email}
-            </span>
-          </Dropdown.Header>
-          <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-          <Dropdown.Item href="/settings">Settings</Dropdown.Item>
-          <Dropdown.Divider />
-          <Dropdown.Item
-            onClick={() => {
-              signOut({ redirect: true, callbackUrl: "/" });
-            }}
+        <div className="flex gap-x-2">
+          {status === "authenticated" && (
+            <Link href="/dashboard">
+              <div className="cursor-pointer">Dashboard</div>
+            </Link>
+          )}
+          <Dropdown
+            inline
+            label={
+              <Avatar
+                alt="User settings"
+                img={data?.user.image ?? ""}
+                rounded
+                size="xs"
+              />
+            }
           >
-            Sign out
-          </Dropdown.Item>
-        </Dropdown>
+            <Dropdown.Header>
+              <span className="block text-sm">{data?.user.name}</span>
+              <span className="block truncate text-sm font-medium">
+                {data?.user.email}
+              </span>
+            </Dropdown.Header>
+            <Dropdown.Item href="/settings">Settings</Dropdown.Item>
+            <Dropdown.Divider />
+            <Dropdown.Item
+              onClick={() => {
+                signOut({ redirect: true, callbackUrl: "/" });
+              }}
+            >
+              Sign out
+            </Dropdown.Item>
+          </Dropdown>
+        </div>
       </div>
     </Navbar>
   );

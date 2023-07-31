@@ -4,7 +4,7 @@ import {
   paginatedPrivateProcedure,
   protectedProcedure,
 } from "../trpc";
-import { generateProjectSecret } from "@/services/sign-hash.service";
+import { encryptData } from "@/services/sign-hash.service";
 import { TRPCError } from "@trpc/server";
 
 export const projectsRouter = createTRPCRouter({
@@ -50,26 +50,16 @@ export const projectsRouter = createTRPCRouter({
         data: {
           name: projectName,
           description,
-          projectSecret: generateProjectSecret(),
           userId: id,
         },
       });
-      const {} = createdProject;
-      // await prisma.projectApiKeys.create({ data: { projectId, hashedSecret } })
-      // console.log({ createdProject });
-      return createdProject;
-    }),
-  /**
-   * Endpoint to generate a new client secret.
-   */
-  generateProjectSecret: protectedProcedure
-    .input(z.object({ projectId: z.string() }))
-    .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
-      await prisma.project.update({
-        where: { projectPublicId: projectId },
-        data: { projectSecret: generateProjectSecret() },
+      const { id: projectId, projectPublicId } = createdProject;
+      const hashedSecret = encryptData(projectPublicId);
+      console.log({ hashedSecret });
+      await prisma.projectApiKeys.create({
+        data: { projectId, hashedSecret, name: "API Key" },
       });
-      return projectId;
+      return createdProject;
     }),
   /**
    *
@@ -98,17 +88,6 @@ export const projectsRouter = createTRPCRouter({
         });
       }
     ),
-  getSecrets: protectedProcedure
-    .input(z.object({ projectId: z.string() }))
-    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
-      const foundSecrets = await prisma.projectApiKeys.findMany({
-        where: { projectId },
-        include: { project: true },
-      });
-      if (foundSecrets.length > 0) {
-        // const {} = foundSecrets[0];
-      }
-    }),
   deleteProject: protectedProcedure
     .input(z.object({ projectId: z.string() }))
     .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
@@ -116,23 +95,6 @@ export const projectsRouter = createTRPCRouter({
         where: { id: projectId },
         include: { ProjectApiKeys: true },
       });
-    }),
-  getCurrentSecret: protectedProcedure
-    .input(z.object({ projectId: z.string() }))
-    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
-      const foundProject = await prisma.project.findFirst({
-        where: { id: projectId },
-        select: {
-          projectSecret: true,
-        },
-      });
-      if (!foundProject) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Unable to find a secret",
-        });
-      }
-      return foundProject.projectSecret;
     }),
   getSecretAndApiKeys: protectedProcedure
     .input(z.object({ projectId: z.string() }))
@@ -144,10 +106,14 @@ export const projectsRouter = createTRPCRouter({
       if (foundData.length > 0) {
         if (foundData[0]) {
           const { project } = foundData[0];
-          const apiKeys = foundData.map(({ hashedSecret, id }) => ({
-            hashedSecret,
-            id,
-          }));
+          const apiKeys = foundData.map(
+            ({ hashedSecret, id, name, createdAt }) => ({
+              hashedSecret,
+              id,
+              name,
+              createdAt,
+            })
+          );
           return {
             project,
             apiKeys,
@@ -157,6 +123,24 @@ export const projectsRouter = createTRPCRouter({
       throw new TRPCError({
         code: "BAD_REQUEST",
         message: "Unable to find additional secrets",
+      });
+    }),
+  createNewSecret: protectedProcedure
+    .input(z.object({ projectId: z.string(), name: z.string() }))
+    .mutation(async ({ ctx: { prisma }, input: { projectId, name } }) => {
+      const foundProject = await prisma.project.findFirst({
+        where: { id: projectId },
+      });
+
+      if (!foundProject) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Project not found",
+        });
+      }
+      const { projectPublicId } = foundProject;
+      return await prisma.projectApiKeys.create({
+        data: { hashedSecret: encryptData(projectPublicId), name, projectId },
       });
     }),
 });

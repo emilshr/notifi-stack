@@ -42,8 +42,6 @@ export const getServerSideProps = async ({
     };
   }
 
-  console.log(project);
-
   return {
     props: { project: JSON.parse(JSON.stringify(project)) as Project },
   };

@@ -20,7 +20,8 @@
         "SKIP_ENV_VALIDATION",
         "VERCEL_URL",
         "VERCEL",
-        "PORT"
+        "PORT",
+        "ENCRYPTION_SECRET"
       ]
     },
     "lint": {},
@@ -35,7 +36,8 @@
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET",
         "NODE_ENV",
-        "PORT"
+        "PORT",
+        "ENCRYPTION_SECRET"
       ]
     },
     "update-schema": {

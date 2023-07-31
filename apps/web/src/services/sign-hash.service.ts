@@ -1,11 +1,12 @@
-import { randomBytes, createHmac } from "crypto";
+import crypto from "crypto-js";
+import { env } from "@/env.mjs";
 
-export const generateProjectSecret = () => {
-  return randomBytes(48).toString("hex");
+export const encryptData = (projectPublicId: string) => {
+  return crypto.AES.encrypt(projectPublicId, env.ENCRYPTION_SECRET).toString();
 };
 
-export const createHash = (publicProjectId: string, projectSecret: string) => {
-  return createHmac("sha256", projectSecret)
-    .update(publicProjectId)
-    .digest("base64");
+export const decryptData = (encryptedData: string) => {
+  return crypto.AES.decrypt(encryptedData, env.ENCRYPTION_SECRET).toString(
+    crypto.enc.Utf8
+  );
 };
