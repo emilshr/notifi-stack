@@ -18,7 +18,17 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  transpilePackages: ["ui", "@emilshr/notifi"],
+  transpilePackages: ["@emilshr/notifi"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+        port: '',
+        pathname: '/free-vector/**'
+      },
+    ],
+  },
 };
 
 export default config;

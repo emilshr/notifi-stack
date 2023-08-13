@@ -1,11 +1,18 @@
 import { z } from "zod";
 import {
   createTRPCRouter,
+  offsetPaginatedPrivateProcedure,
   paginatedPrivateProcedure,
   protectedProcedure,
 } from "../trpc";
-import { encryptData } from "@/services/sign-hash.service";
+import {
+  encryptData,
+  generateNewTokenSecret,
+} from "@/services/sign-hash.service";
 import { TRPCError } from "@trpc/server";
+import { getRandomBackgroundUrl } from "@/common/background-generator";
+
+const API_TEMPLATE = "NOTIFI-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
 export const projectsRouter = createTRPCRouter({
   /**
@@ -43,19 +50,28 @@ export const projectsRouter = createTRPCRouter({
       const {
         prisma,
         session: {
-          user: { id },
+          user: { id: userId },
         },
       } = ctx;
       const createdProject = await prisma.project.create({
         data: {
           name: projectName,
           description,
-          userId: id,
+          userId,
+          backgroundUrl: getRandomBackgroundUrl(),
         },
       });
-      const { id: projectId, projectPublicId } = createdProject;
-      const hashedSecret = encryptData(projectPublicId);
-      console.log({ hashedSecret });
+      const { id: projectId } = createdProject;
+      const hashedSecret = encryptData(projectId, generateNewTokenSecret());
+      await prisma.projectSecrets.create({
+        data: { projectSecret: hashedSecret, projectId },
+      });
+      await prisma.clientAccessTokenSecrets.create({
+        data: {
+          accessTokenSecret: encryptData(projectId, generateNewTokenSecret()),
+          projectId,
+        },
+      });
       await prisma.projectApiKeys.create({
         data: { projectId, hashedSecret, name: "API Key" },
       });
@@ -100,47 +116,154 @@ export const projectsRouter = createTRPCRouter({
     .input(z.object({ projectId: z.string() }))
     .query(async ({ ctx: { prisma }, input: { projectId } }) => {
       const foundData = await prisma.projectApiKeys.findMany({
-        where: { projectId },
-        include: { project: true },
+        where: { project: { id: projectId } },
+        include: {
+          project: {
+            include: {
+              ClientAccessTokenSecrets: {
+                where: { project: { id: projectId } },
+                select: {
+                  accessTokenSecret: true,
+                },
+              },
+              ProjectSecrets: {
+                where: {
+                  Project: {
+                    id: projectId,
+                  },
+                },
+                select: {
+                  projectSecret: true,
+                },
+              },
+            },
+          },
+        },
       });
-      if (foundData.length > 0) {
-        if (foundData[0]) {
-          const { project } = foundData[0];
-          const apiKeys = foundData.map(
-            ({ hashedSecret, id, name, createdAt }) => ({
-              hashedSecret,
-              id,
-              name,
-              createdAt,
-            })
-          );
+
+      const apiKeys = foundData.map(
+        ({ hashedSecret, id, name, createdAt }) => ({
+          hashedSecret,
+          id,
+          name,
+          createdAt,
+        })
+      );
+      if (foundData[0]) {
+        const { ClientAccessTokenSecrets, ProjectSecrets } =
+          foundData[0].project;
+        if (ClientAccessTokenSecrets && ProjectSecrets) {
           return {
-            project,
             apiKeys,
+            accessTokenSecret: {
+              secret: `${API_TEMPLATE}${ClientAccessTokenSecrets.accessTokenSecret.slice(
+                ClientAccessTokenSecrets.accessTokenSecret.length - 4,
+                ClientAccessTokenSecrets.accessTokenSecret.length - 1
+              )}`,
+            },
+            projectSecret: {
+              secret: `${API_TEMPLATE}${ProjectSecrets.projectSecret.slice(
+                ProjectSecrets.projectSecret.length - 4,
+                ProjectSecrets.projectSecret.length - 1
+              )}`,
+            },
           };
         }
       }
       throw new TRPCError({
         code: "BAD_REQUEST",
-        message: "Unable to find additional secrets",
+        message: "Requested project not found",
       });
     }),
-  createNewSecret: protectedProcedure
+  createNewApiKey: protectedProcedure
     .input(z.object({ projectId: z.string(), name: z.string() }))
-    .mutation(async ({ ctx: { prisma }, input: { projectId, name } }) => {
-      const foundProject = await prisma.project.findFirst({
-        where: { id: projectId },
+    .mutation(async ({ ctx: { prisma }, input: { name, projectId } }) => {
+      const foundProjectSecret = await prisma.projectSecrets.findFirst({
+        where: { projectId },
       });
 
-      if (!foundProject) {
+      if (!foundProjectSecret) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Project not found",
         });
       }
-      const { projectPublicId } = foundProject;
+      const { projectSecret } = foundProjectSecret;
       return await prisma.projectApiKeys.create({
-        data: { hashedSecret: encryptData(projectPublicId), name, projectId },
+        data: {
+          hashedSecret: encryptData(projectId, projectSecret),
+          name,
+          projectId,
+        },
       });
+    }),
+  createNewAccessTokenSecret: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const secret = generateNewTokenSecret();
+      await prisma.clientAccessTokenSecrets.upsert({
+        create: { accessTokenSecret: secret, projectId },
+        update: { accessTokenSecret: secret },
+        where: { projectId },
+      });
+
+      return {
+        tokenSecret: `${API_TEMPLATE}${secret.slice(
+          secret.length - 4,
+          secret.length - 1
+        )}`,
+      };
+    }),
+  createNewApiKeySecret: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const secret = generateNewTokenSecret();
+
+      console.log({ secret });
+
+      await prisma.projectSecrets.upsert({
+        create: { projectSecret: secret, projectId },
+        update: { projectSecret: secret },
+        where: { projectId },
+      });
+
+      return {
+        tokenSecret: `${API_TEMPLATE}${secret.slice(
+          secret.length - 4,
+          secret.length - 1
+        )}`,
+      };
+    }),
+  getProjectActivityPageCount: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const count = await prisma.errorLogs.count({ where: { projectId } });
+      return Math.ceil(count / 10);
+    }),
+  getProjectActivities: offsetPaginatedPrivateProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ ctx: { prisma }, input: { projectId, skip, take } }) => {
+      const items = await prisma.errorLogs.findMany({
+        where: { projectId },
+        take,
+        skip,
+      });
+      return {
+        items,
+      };
+    }),
+  getProjectOverview: protectedProcedure
+    .input(z.object({ projectId: z.string() }))
+    .query(async ({ ctx: { prisma }, input: { projectId } }) => {
+      const [dailyReports, apiConsumption] = await prisma.$transaction([
+        prisma.errorLogs.count({
+          where: { createdAt: { gte: new Date() }, projectId },
+        }),
+        prisma.projectApiKeys.count({ where: { projectId } }),
+      ]);
+      return {
+        dailyReports,
+        apiConsumption,
+      };
     }),
 });

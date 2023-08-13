@@ -12,7 +12,7 @@ import { CreateFirstKeyAlert } from "../../../components/project-dashboard/Creat
 import type { Project } from "@prisma/client";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
-import { GetStartedAlert } from "@/components/project-dashboard/GetStartedAlert";
+import { ProjectOverview } from "@/components/project-overview/ProjectOverview";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
   projectId: string;
@@ -57,8 +57,7 @@ export default function ProjectView({
         title="Project overview"
         description="All stats and figures about your project"
       />
-      <GetStartedAlert />
-      <CreateFirstKeyAlert projectId={project.id} />
+      <ProjectOverview />
     </SidePaneWrapper>
   );
 }

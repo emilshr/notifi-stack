@@ -13,7 +13,7 @@ export const ProjectSectionWrapper = ({
   actionComponent,
 }: PropsWithChildren<Props>) => {
   return (
-    <div className="rounded-md border-[1px] border-slate-700 p-4 hover:border-slate-500 focus:border-slate-500">
+    <div className="rounded-md border-[1px] p-4 dark:border-slate-900">
       <div className="flex flex-col gap-y-6">
         <div className="flex w-full justify-between">
           <div className="flex flex-col gap-y-1">

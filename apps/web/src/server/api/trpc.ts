@@ -14,7 +14,10 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 import { getServerAuthSession } from "@/server/auth";
 import { prisma } from "@/server/db";
-import { paginatedInputSchema } from "@/common/zodSchema";
+import {
+  offsetPaginationInputSchema,
+  paginatedInputSchema,
+} from "@/common/zodSchema";
 
 /**
  * 1. CONTEXT
@@ -141,3 +144,7 @@ export const paginatedPrivateProcedure =
 
 export const paginatedPublicProcedure =
   publicProcedure.input(paginatedInputSchema);
+
+export const offsetPaginatedPrivateProcedure = protectedProcedure.input(
+  offsetPaginationInputSchema
+);

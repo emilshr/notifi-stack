@@ -1,4 +1,3 @@
-import { Sidebar } from "flowbite-react";
 import { useRouter } from "next/router";
 import { twJoin } from "tailwind-merge";
 import { MobileNavigation } from "./MobileNavigation";
@@ -12,7 +11,7 @@ export const ProjectSidePane = () => {
 
   return (
     <>
-      <Sidebar
+      {/* <Sidebar
         aria-label="Notifi sidebar"
         className="hidden bg-transparent text-slate-300 dark:bg-transparent lg:block"
         theme={{
@@ -39,6 +38,16 @@ export const ProjectSidePane = () => {
               Overview
             </Sidebar.Item>
             <Sidebar.Item
+              active={currentTab === "activity"}
+              className={twJoin([
+                "cursor-pointer font-semibold hover:bg-opacity-75 hover:text-slate-900",
+                currentTab === "activity" ? "" : "text-slate-300",
+              ])}
+              onClick={() => router.push(`/projects/${projectId}/activity`)}
+            >
+              Activity
+            </Sidebar.Item>
+            <Sidebar.Item
               active={currentTab === "secrets"}
               className={twJoin([
                 "cursor-pointer font-semibold hover:bg-opacity-75 hover:text-slate-900",
@@ -46,7 +55,7 @@ export const ProjectSidePane = () => {
               ])}
               onClick={() => router.push(`/projects/${projectId}/secrets`)}
             >
-              Secrets
+              API Keys
             </Sidebar.Item>
             <Sidebar.Item
               active={currentTab === "settings"}
@@ -60,7 +69,7 @@ export const ProjectSidePane = () => {
             </Sidebar.Item>
           </Sidebar.ItemGroup>
         </Sidebar.Items>
-      </Sidebar>
+      </Sidebar> */}
       <MobileNavigation currentTab={currentTab || ""} />
     </>
   );

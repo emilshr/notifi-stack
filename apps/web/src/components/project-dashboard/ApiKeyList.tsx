@@ -1,11 +1,36 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
+import { toast } from "react-toastify";
+import { DataGrid } from "../data-grid/DataGrid";
+import type { TableColumnHeader } from "@/common/types";
+import { useCallback } from "react";
+import { Button } from "@nextui-org/react";
+
 type CellProps = {
   hashedSecret: string;
   id: string;
   name: string;
   createdAt: Date;
 };
+
+const columnHeaders: TableColumnHeader<Omit<CellProps, "id">>[] = [
+  {
+    key: "name",
+    label: "Name",
+  },
+  {
+    key: "hashedSecret",
+    label: "API Key",
+  },
+  {
+    key: "createdAt",
+    label: "Timestamp",
+  },
+  {
+    key: "actions",
+    label: "",
+  },
+];
 
 const Cell = ({ createdAt, hashedSecret, name }: CellProps) => {
   return (
@@ -28,11 +53,17 @@ const Cell = ({ createdAt, hashedSecret, name }: CellProps) => {
             onClick={(event) => {
               event.stopPropagation();
               navigator.clipboard.writeText(hashedSecret);
+              toast("Copied to clipboard", { type: "info" });
             }}
           >
             Copy
           </span>
-          <span className="cursor-pointer text-red-600 hover:underline">
+          <span
+            className="cursor-pointer text-red-600 hover:underline"
+            onClick={(event) => {
+              event.stopPropagation();
+            }}
+          >
             Delete
           </span>
         </div>
@@ -42,21 +73,47 @@ const Cell = ({ createdAt, hashedSecret, name }: CellProps) => {
 };
 
 export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
+  const renderCell = useCallback((apiKey: CellProps, columnKey: string) => {
+    const cellValue = apiKey[columnKey as keyof CellProps];
+
+    switch (columnKey) {
+      case "name":
+        return <span className="font-bold">{cellValue as string}</span>;
+      case "hashedSecret":
+        const { length } = cellValue as string;
+        return (
+          <span className="font-mono">
+            NOTIFI-XXXXXXXXXXXXXXXXXXXX
+            {(cellValue as string).slice(length - 4, length - 1)}
+          </span>
+        );
+      case "createdAt":
+        return <>{(cellValue as Date).toLocaleString()}</>;
+      case "actions":
+        return (
+          <div className="flex gap-x-2">
+            <Button color="secondary" variant="light">
+              Copy
+            </Button>
+            <Button color="danger" variant="light">
+              Delete
+            </Button>
+          </div>
+        );
+      default:
+        return <>cellValue</>;
+    }
+  }, []);
+
   return (
-    <div className="overflow-x-scroll rounded-md border-[1px] border-slate-700 p-4 [-ms-overflow-style:'none'] [scrollbar-width:'none'] [&::-webkit-scrollbar]:hidden">
-      <div className="flex flex-col gap-y-4 divide-y divide-slate-700">
-        <div className="flex font-extrabold">
-          <div className="flex flex-[3]">Name</div>
-          <div className="flex flex-1">API Key</div>
-          <div className="flex flex-1">Created</div>
-          <div className="flex flex-1"></div>
-        </div>
-        <div className="divide-y divide-slate-700">
-          {apiKeys.map((key) => (
-            <Cell {...key} key={key.id} />
-          ))}
-        </div>
-      </div>
-    </div>
+    <DataGrid
+      columnHeaders={columnHeaders}
+      data={apiKeys}
+      itemKey="id"
+      loading={false}
+      onNext={() => {}}
+      onPrev={() => {}}
+      renderCell={renderCell}
+    />
   );
 };

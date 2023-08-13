@@ -1,8 +1,10 @@
 import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
+import { AccessTokenSecretConfiguration } from "@/components/project-dashboard/AccessTokenSecretConfiguration";
 import { ApiKeyList } from "@/components/project-dashboard/ApiKeyList";
-import { CreateNewSecret } from "@/components/project-dashboard/CreateNewSecret";
+import { CreateNewApiKey } from "@/components/project-dashboard/CreateNewApiKey";
+import { SecretConfiguration } from "@/components/project-dashboard/SecretConfiguration";
 import { appRouter } from "@/server/api/root";
 import { createInnerTRPCContext } from "@/server/api/trpc";
 import { getServerAuthSession } from "@/server/auth";
@@ -50,6 +52,8 @@ export const getServerSideProps = async ({
 
 export default function Secrets({
   apiKeys,
+  accessTokenSecret,
+  projectSecret,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <SidePaneWrapper>
@@ -57,13 +61,15 @@ export default function Secrets({
         title="Project API keys"
         description="View and manage your private API keys here"
       />
+      <SecretConfiguration {...projectSecret} />
       <ProjectSectionWrapper
         sectionTitle="Standard keys"
         sectionDescription="These keys will allow you to authenticate API requests"
-        actionComponent={<CreateNewSecret />}
+        actionComponent={<CreateNewApiKey />}
       >
         <ApiKeyList apiKeys={apiKeys} />
       </ProjectSectionWrapper>
+      <AccessTokenSecretConfiguration {...accessTokenSecret} />
     </SidePaneWrapper>
   );
 }

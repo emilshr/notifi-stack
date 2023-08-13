@@ -7,7 +7,6 @@
     "skipLibCheck": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
@@ -19,15 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "noEmit": false,
+    "composite": true
   },
-  "include": [
-    ".eslintrc.cjs",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.mjs"
-  ],
-  "exclude": ["node_modules"]
+  "include": [".eslintrc.cjs", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "**/*.mjs"]
 }

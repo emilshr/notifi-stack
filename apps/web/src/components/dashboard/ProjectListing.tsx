@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { api } from "@/utils/api";
-import { Card } from "flowbite-react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import CardBackground from "../../../public/icons/line_background.svg";
 
 export const ProjectListing = () => {
   const [cursor, setCursor] = useState<string | undefined>(undefined);
@@ -21,19 +24,42 @@ export const ProjectListing = () => {
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
       {data?.items.map((item) => {
         return (
-          <Link href={`/projects/${item.id}`} key={item.id}>
-            <Card className="h-full min-h-[200px] cursor-pointer border-slate-600 bg-transparent hover:border-slate-500 hover:bg-gradient-to-t hover:from-slate-900 hover:to-transparent">
-              <div className="flex h-full flex-col justify-between">
-                <div className="flex flex-col justify-start gap-y-2">
-                  <h3 className="text-2xl font-bold">{item.name}</h3>
-                  <p>{item.description}</p>
-                </div>
-                <div className="flex w-full justify-end font-mono text-xs">
-                  Created: {item.createdAt.toLocaleDateString()}
-                </div>
+          <Card
+            isFooterBlurred
+            className="h-full min-h-[200px]"
+            key={item.id}
+            radius="sm"
+            isPressable
+          >
+            <Link
+              href={`/projects/${item.id}`}
+              key={item.id}
+              className="h-full w-full"
+            >
+              <div className="h-full w-full cursor-pointer">
+                <CardHeader className="w-full bg-white/30 p-0 backdrop-blur-md">
+                  <Image
+                    alt="Card background"
+                    src={item.backgroundUrl}
+                    height={250}
+                    width={250}
+                    className="aspect-square h-52 w-full object-cover"
+                  />
+                </CardHeader>
+                <CardBody className="cursor-pointer flex-col items-start gap-y-1">
+                  <p className="line-clamp-1 text-large font-bold">
+                    {item.name}
+                  </p>
+                  <small className="text-default-500">
+                    {item.createdAt.toLocaleDateString()}
+                  </small>
+                  <h4 className="line-clamp-2 text-tiny font-bold">
+                    {item.description}
+                  </h4>
+                </CardBody>
               </div>
-            </Card>
-          </Link>
+            </Link>
+          </Card>
         );
       })}
     </div>

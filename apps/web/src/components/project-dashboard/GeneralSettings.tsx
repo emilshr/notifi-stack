@@ -1,11 +1,10 @@
-import { Button } from "flowbite-react";
-import { TextArea, TextField } from "@/components";
 import { useState } from "react";
 import { api } from "@/utils/api";
 import type { Project } from "@prisma/client";
 import { DeleteProject } from "./DeleteProject";
 import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
 import { toast } from "react-toastify";
+import { Button, Input, Textarea } from "@nextui-org/react";
 
 type Props = {
   project: Project;
@@ -29,10 +28,9 @@ export const GeneralSettings = ({ project }: Props) => {
         sectionTitle="General settings"
         sectionDescription="Change your project name and description"
       >
-        <TextField
-          placeholder="Your project name"
+        <Input
+          label="Project name"
           required
-          shadow
           type="text"
           className="bg-transparent"
           value={name}
@@ -41,11 +39,11 @@ export const GeneralSettings = ({ project }: Props) => {
             setName(event.currentTarget.value);
           }}
         />
-        <TextArea
-          placeholder="Description about your project"
+        <Textarea
+          label="Project description"
           value={description}
+          minRows={4}
           aria-multiline
-          rows={5}
           onChange={(event) => {
             event.stopPropagation();
             setDescription(event.currentTarget.value);
@@ -53,11 +51,12 @@ export const GeneralSettings = ({ project }: Props) => {
         />
         <div className="flex justify-end">
           <Button
+            color="secondary"
             disabled={
               isLoading ||
               (project.name === name && project.description === description)
             }
-            isProcessing={isLoading}
+            isLoading={isLoading}
             onClick={() => {
               mutate({ name, description, projectId: project.id });
             }}

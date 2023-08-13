@@ -8,8 +8,19 @@
     "skipLibCheck": true,
     "noEmit": true,
     "strict": true,
-    "typeRoots": ["./node_modules/@types/"]
+    "noUncheckedIndexedAccess": true,
+    "typeRoots": ["./node_modules/@types/"],
+    "paths": {
+      "@web/*": ["../../apps/web/*"]
+    }
   },
-  "extends": "tsconfig/react-library",
-  "exclude": ["node_modules"]
+  "references": [
+    {
+      "path": "../../apps/web/tsconfig.json"
+    }
+  ],
+  "include": [
+    "**/*.ts",
+  ],
+  "exclude": ["node_modules", "./dist/**/*", "./.turbo/**/*"]
 }
