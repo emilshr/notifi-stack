@@ -42,7 +42,10 @@ jobs:
       - name: Setting yarn version
         run: yarn set version 3.3.1
 
-      - name: Install dependencies
+      - name: Generating prisma client
+        run: yarn workspace web setup-db && yarn workspace web install
+
+      - name: Install dependencies on notifi package
         run: yarn workspace '@emilshr/notifi' install
 
       - name: Publish packages with Changeset
