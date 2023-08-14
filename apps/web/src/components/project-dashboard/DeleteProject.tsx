@@ -1,5 +1,12 @@
 import { api } from "@/utils/api";
-import { Button, Modal } from "flowbite-react";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -18,38 +25,38 @@ export const DeleteProject = ({ projectId }: Props) => {
   return (
     <>
       <Button
-        color="failure"
+        color="danger"
         onClick={() => {
           setOpen(true);
         }}
       >
         Delete project
       </Button>
-      <Modal show={open} onClose={() => setOpen(false)}>
-        <Modal.Header>
-          <div className="">Confirm your action</div>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="text-slate-700">
-            Are you sure you want to delete this project? This action is
-            irreversible!
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <div className="flex w-full justify-end gap-x-2">
-            <Button color="gray" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button
-              color="failure"
-              isProcessing={isLoading}
-              disabled={isLoading}
-              onClick={() => mutate({ projectId })}
-            >
-              Delete
-            </Button>
-          </div>
-        </Modal.Footer>
+      <Modal isOpen={open} onOpenChange={() => setOpen(false)} backdrop="blur">
+        <ModalContent>
+          <ModalHeader>
+            <div className="">Confirm your action</div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="">
+              Are you sure you want to delete this project? This action is
+              irreversible!
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <div className="flex w-full justify-end gap-x-2">
+              <Button onClick={() => setOpen(false)}>Cancel</Button>
+              <Button
+                color="danger"
+                isLoading={isLoading}
+                disabled={isLoading}
+                onClick={() => mutate({ projectId })}
+              >
+                Delete
+              </Button>
+            </div>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );

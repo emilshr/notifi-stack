@@ -3,10 +3,6 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply bg-black text-slate-200;
-  }
-
   body {
     @apply min-h-screen;
   }

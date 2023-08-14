@@ -8,8 +8,15 @@
     "skipLibCheck": true,
     "noEmit": true,
     "strict": true,
-    "typeRoots": ["./node_modules/@types/"]
+    "noUncheckedIndexedAccess": true,
+    "typeRoots": ["./node_modules/@types/", "../../apps/web/node_modules/@types/"],
+    "paths": {
+      "@web/*": ["../../apps/web/*"],
+    },
+    "jsx": "react-jsx"
   },
-  "extends": "tsconfig/react-library",
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*.ts",
+  ],
+  "exclude": ["node_modules", "./dist/**/*", "./.turbo/**/*"]
 }

@@ -69,23 +69,55 @@ model VerificationToken {
 }
 
 model Project {
-    id              String           @id @default(cuid())
-    name            String
-    description     String
-    userId          String
-    projectPublicId String           @unique() @default(uuid())
-    projectSecret   String
-    createdAt       DateTime         @default(now())
-    updatedAt       DateTime         @updatedAt
-    accountId       String?
-    user            User             @relation(fields: [userId], references: [id])
-    Account         Account?         @relation(fields: [accountId], references: [id])
-    ProjectApiKeys  ProjectApiKeys[]
+    id             String           @id @default(cuid())
+    name           String
+    description    String
+    userId         String
+    backgroundUrl  String
+    createdAt      DateTime         @default(now())
+    updatedAt      DateTime         @updatedAt
+    accountId      String?
+    user           User             @relation(fields: [userId], references: [id])
+    Account        Account?         @relation(fields: [accountId], references: [id])
+    ProjectApiKeys ProjectApiKeys[]
+    ErrorLogs      ErrorLogs[]
+    ProjectSecrets ProjectSecrets?
+}
+
+model ProjectSecrets {
+    id            String   @id @default(cuid())
+    projectSecret String   @unique
+    projectId     String   @unique
+    createdAt     DateTime @default(now())
+
+    Project        Project          @relation(fields: [projectId], references: [id])
+    ProjectApiKeys ProjectApiKeys[]
 }
 
 model ProjectApiKeys {
-    id           String  @id @default(cuid())
-    projectId    String
-    hashedSecret String  @unique()
-    project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    id              String         @id @default(cuid())
+    name            String
+    projectId       String
+    hashedSecret    String         @unique()
+    projectSecretId String
+    createdAt       DateTime       @default(now())
+    project         Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    projectSecret   ProjectSecrets @relation(fields: [projectSecretId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+}
+
+model ErrorLogs {
+    id        String   @id @default(cuid())
+    projectId String
+    location  String
+    host      String
+    cookie    String
+    origin    String
+    source    String?
+    lineNo    Int?
+    colNo     Int?
+    message   String?
+    stack     String?
+    project   Project  @relation(fields: [projectId], references: [id])
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }

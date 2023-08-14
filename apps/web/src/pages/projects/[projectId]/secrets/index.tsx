@@ -1,15 +1,19 @@
-import { appRouter } from "@/server/api/root";
-import { createInnerTRPCContext } from "@/server/api/trpc";
-import { getServerAuthSession } from "@/server/auth";
-import type { Project } from "@prisma/client";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import type { GetServerSidePropsContext } from "next";
-import type { ParsedUrlQuery } from "querystring";
-import SuperJSON from "superjson";
-import { SetSecret } from "../../../../components/project-dashboard/SetSecret";
 import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
+import { ApiKeyList } from "@/components/project-dashboard/ApiKeyList";
+import { CreateNewApiKey } from "@/components/project-dashboard/CreateNewApiKey";
+import { SecretConfiguration } from "@/components/project-dashboard/SecretConfiguration";
+import { appRouter } from "@/server/api/root";
+import { createInnerTRPCContext } from "@/server/api/trpc";
+import { getServerAuthSession } from "@/server/auth";
+import { createServerSideHelpers } from "@trpc/react-query/server";
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
+import type { ParsedUrlQuery } from "querystring";
+import SuperJSON from "superjson";
 
 interface ProjectQueryParams extends ParsedUrlQuery {
   projectId: string;
@@ -27,11 +31,11 @@ export const getServerSideProps = async ({
     transformer: SuperJSON,
   });
 
-  const project = await ssg.projects.getProject.fetch({
+  const output = await ssg.projects.getSecretAndApiKeys.fetch({
     projectId,
   });
 
-  if (!project) {
+  if (!output) {
     return {
       redirect: {
         destination: "/404",
@@ -40,25 +44,28 @@ export const getServerSideProps = async ({
     };
   }
 
-  console.log(project);
-
   return {
-    props: { project: JSON.parse(JSON.stringify(project)) as Project },
+    props: JSON.parse(JSON.stringify(output)) as typeof output,
   };
 };
 
-export default function Secrets() {
+export default function Secrets({
+  apiKeys,
+  projectSecret,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <SidePaneWrapper>
       <SectionHeader
         title="Project API keys"
         description="View and manage your private API keys here"
       />
+      <SecretConfiguration {...projectSecret} />
       <ProjectSectionWrapper
-        sectionTitle="Configure your project secret"
-        sectionDescription="This secret is used to hash your API private keys. We would recommend setting a secure secret"
+        sectionTitle="Standard keys"
+        sectionDescription="These keys will allow you to authenticate API requests"
+        actionComponent={<CreateNewApiKey />}
       >
-        <SetSecret />
+        <ApiKeyList apiKeys={apiKeys} />
       </ProjectSectionWrapper>
     </SidePaneWrapper>
   );
