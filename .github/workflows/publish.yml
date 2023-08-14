@@ -53,7 +53,7 @@ jobs:
         id: Changesets
         uses: changesets/action@v1
         with:
-          publish: yarn publish-packages
+          publish: npm run publish-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
