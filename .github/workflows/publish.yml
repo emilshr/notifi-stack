@@ -43,7 +43,7 @@ jobs:
         run: npm --workspace=web install && npm run setup-db
         timeout-minutes: 10
         env:
-          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Install dependencies in notifi package
         run: npm --workspace='@emilshr/notifi' install
