@@ -28,7 +28,7 @@
     "@types/react": "^18.2.20",
     "eslint": "^8.45.0",
     "tsc": "^2.0.4",
-    "tsconfig": "workspace:*",
+    "tsconfig": "*",
     "tsup": "^7.1.0",
     "typescript": "^5.1.6"
   },
