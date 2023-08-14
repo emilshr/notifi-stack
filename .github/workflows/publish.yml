@@ -40,7 +40,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Generating prisma binaries
-        run: npm --workspace=web install && npm run setup-db
+        run: npm install && npm run setup-db
         timeout-minutes: 10
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
