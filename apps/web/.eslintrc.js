@@ -25,6 +25,9 @@ const config = {
     "@typescript-eslint/no-floating-promises": 0,
     "@typescript-eslint/consistent-type-definitions": 0,
     "@typescript-eslint/prefer-nullish-coalescing": 0
+  },
+  env: {
+    jest: true,
   }
 };
 

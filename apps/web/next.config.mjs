@@ -18,7 +18,7 @@ const config = {
     locales: ["en"],
     defaultLocale: "en"
   },
-  transpilePackages: ["@emilshr/notifi"],
+  transpilePackages: ["eslint-config-custom", "tsconfig"],
   images: {
     remotePatterns: [
       {
