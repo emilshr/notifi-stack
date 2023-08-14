@@ -44,5 +44,6 @@
   },
   "peerDependencies": {
     "@prisma/client": "^5.1.1"
-  }
+  },
+  "packageManager": "yarn@3.3.1"
 }
