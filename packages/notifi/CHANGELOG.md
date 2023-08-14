@@ -1,5 +1,11 @@
 # @emilshr/notifi
 
+## 0.4.0
+
+### Minor Changes
+
+- 6573047: Adding support for TRPC & React
+
 ## 0.3.2
 
 ### Patch Changes
