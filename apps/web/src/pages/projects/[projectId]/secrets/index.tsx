@@ -1,7 +1,6 @@
 import { ProjectSectionWrapper } from "@/components/ProjectSectionWrapper";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
-import { AccessTokenSecretConfiguration } from "@/components/project-dashboard/AccessTokenSecretConfiguration";
 import { ApiKeyList } from "@/components/project-dashboard/ApiKeyList";
 import { CreateNewApiKey } from "@/components/project-dashboard/CreateNewApiKey";
 import { SecretConfiguration } from "@/components/project-dashboard/SecretConfiguration";
@@ -52,7 +51,6 @@ export const getServerSideProps = async ({
 
 export default function Secrets({
   apiKeys,
-  accessTokenSecret,
   projectSecret,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
@@ -69,7 +67,6 @@ export default function Secrets({
       >
         <ApiKeyList apiKeys={apiKeys} />
       </ProjectSectionWrapper>
-      <AccessTokenSecretConfiguration {...accessTokenSecret} />
     </SidePaneWrapper>
   );
 }

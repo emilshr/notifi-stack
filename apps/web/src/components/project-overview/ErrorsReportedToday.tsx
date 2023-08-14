@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  Button,
-  CardBody,
-} from "@nextui-org/react";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { useCallback } from "react";
 
 type Props = {

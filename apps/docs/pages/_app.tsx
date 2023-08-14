@@ -1,16 +1,15 @@
-import { Connection, ApplicationCrashWatcher } from "@emilshr/notifi";
+import { NotifiWrapper } from "@emilshr/notifi";
 import { AppType } from "next/app";
 
-const crashWatcher = new ApplicationCrashWatcher();
-
-crashWatcher.main();
-
 const MyApp: AppType = ({ Component, pageProps }) => {
-  console.log("Root");
   return (
-    <>
+    <NotifiWrapper
+      projectApiKey="U2FsdGVkX1+X/zolnEDMMCHwJm6C415YbEgeUqNK6wGiucwTcdsTLzPEbAclLxOH"
+      projectId="cllb24n140007yys62as1wwy6"
+      connectionEndpoint="http://localhost:3000"
+    >
       <Component {...pageProps} />
-    </>
+    </NotifiWrapper>
   );
 };
 

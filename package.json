@@ -1,14 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "build": "turbo run build",
     "dev": "dotenv -e .env turbo dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "publish-packages": "pnpx turbo run lint build --filter='@emilshr/*' && changeset publish",
-    "setup-db": "pnpm --filter web run setup-db",
-    "run-type-check": "pnpm --filter web run type-check"
+    "publish-packages": "turbo run lint build --filter='@emilshr/*' && changeset publish",
+    "setup-db": "yarn workspace web run setup-db",
+    "run-type-check": "yarn workspace web run type-check"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.7",
@@ -19,10 +18,9 @@
     "turbo": "^1.10.12"
   },
   "name": "notifi-stack",
-  "packageManager": "pnpm@8.6.7",
   "workspaces": [
-    "apps/**/*",
-    "packages/**/*"
+    "apps/*",
+    "packages/*"
   ],
   "dependencies": {
     "@changesets/cli": "^2.26.2"

@@ -9,4 +9,5 @@ export default defineConfig({
   skipNodeModulesBundle: true,
   entry: ["src/index.ts"],
   target: "es2020",
+  platform: "browser",
 });

@@ -14,7 +14,7 @@ import type { TableColumnHeader } from "@/common/types";
 type Props<T> = {
   data: T[];
   itemKey: keyof T;
-  columnHeaders: TableColumnHeader<T>[];
+  columnHeaders: TableColumnHeader[];
   onPageChange: (updatedPageNumber: number) => void;
   loading: boolean;
   displayPagination?: boolean;
@@ -37,7 +37,7 @@ export const DataGrid = <T,>({
         <TableHeader columns={columnHeaders}>
           {(column) => (
             <TableColumn
-              key={column.key as string}
+              key={column.key}
               align={column.key === "actions" ? "center" : "start"}
               allowsResizing
             >

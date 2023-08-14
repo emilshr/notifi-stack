@@ -4,13 +4,13 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "run-p dev:*",
-    "dev:app": "next dev",
+    "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
     "setup-db": "prisma generate && prisma db push",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "test": "jest"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
@@ -45,6 +45,7 @@
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",
     "@types/eslint": "^8.37.0",
+    "@types/jest": "^29.5.3",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^18.16.0",
     "@types/prettier": "^2.7.2",
@@ -58,12 +59,14 @@
     "eslint": "^8.40.0",
     "eslint-config-custom": "workspace:*",
     "eslint-config-next": "^13.4.2",
+    "jest": "^29.6.2",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.21",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
     "prisma": "^5.1.1",
     "tailwindcss": "^3.3.0",
+    "ts-jest": "^29.1.1",
     "tsconfig": "workspace:*",
     "tsx": "^3.12.7",
     "typescript": "^5.0.4"

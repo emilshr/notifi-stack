@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
-import { toast } from "react-toastify";
 import { DataGrid } from "../data-grid/DataGrid";
 import type { TableColumnHeader } from "@/common/types";
 import { useCallback } from "react";
@@ -13,7 +12,7 @@ type CellProps = {
   createdAt: Date;
 };
 
-const columnHeaders: TableColumnHeader<Omit<CellProps, "id">>[] = [
+const columnHeaders: TableColumnHeader[] = [
   {
     key: "name",
     label: "Name",
@@ -31,46 +30,6 @@ const columnHeaders: TableColumnHeader<Omit<CellProps, "id">>[] = [
     label: "",
   },
 ];
-
-const Cell = ({ createdAt, hashedSecret, name }: CellProps) => {
-  return (
-    <div className="flex justify-between">
-      <div className="flex flex-[3] items-center">{name}</div>
-      <div className="flex flex-1 items-center text-slate-400">{`${hashedSecret.slice(
-        0,
-        3
-      )}....${hashedSecret.slice(
-        hashedSecret.length - 3,
-        hashedSecret.length - 1
-      )}`}</div>
-      <div className="flex flex-1 items-center text-slate-400">
-        {createdAt.toLocaleString()}
-      </div>
-      <div className="flex flex-1 items-center">
-        <div className="flex items-center justify-end gap-x-6 whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-          <span
-            className="cursor-pointer text-slate-400 hover:underline"
-            onClick={(event) => {
-              event.stopPropagation();
-              navigator.clipboard.writeText(hashedSecret);
-              toast("Copied to clipboard", { type: "info" });
-            }}
-          >
-            Copy
-          </span>
-          <span
-            className="cursor-pointer text-red-600 hover:underline"
-            onClick={(event) => {
-              event.stopPropagation();
-            }}
-          >
-            Delete
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
   const renderCell = useCallback((apiKey: CellProps, columnKey: string) => {
@@ -92,7 +51,13 @@ export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
       case "actions":
         return (
           <div className="flex gap-x-2">
-            <Button color="secondary" variant="light">
+            <Button
+              color="secondary"
+              variant="light"
+              onClick={() =>
+                window.navigator.clipboard.writeText(apiKey.hashedSecret)
+              }
+            >
               Copy
             </Button>
             <Button color="danger" variant="light">
@@ -106,14 +71,15 @@ export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
   }, []);
 
   return (
-    <DataGrid
+    <DataGrid<CellProps>
       columnHeaders={columnHeaders}
       data={apiKeys}
       itemKey="id"
       loading={false}
-      onNext={() => {}}
-      onPrev={() => {}}
       renderCell={renderCell}
+      onPageChange={(_updatedPage) => {
+        console.log("Changing page");
+      }}
     />
   );
 };

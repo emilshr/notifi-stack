@@ -3,28 +3,29 @@ const config = {
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: true,
+    project: true
   },
   plugins: ["@typescript-eslint"],
   extends: [
     "plugin:@typescript-eslint/recommended-type-checked",
     "plugin:@typescript-eslint/stylistic-type-checked",
-    "custom",
+    "custom"
   ],
+  ignorePatterns: ["**/*.js"],
   rules: {
     "@typescript-eslint/consistent-type-imports": [
       "warn",
       {
         prefer: "type-imports",
-        fixStyle: "inline-type-imports",
-      },
+        fixStyle: "inline-type-imports"
+      }
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-misused-promises": 0,
     "@typescript-eslint/no-floating-promises": 0,
     "@typescript-eslint/consistent-type-definitions": 0,
-    "@typescript-eslint/prefer-nullish-coalescing": 0,
-  },
+    "@typescript-eslint/prefer-nullish-coalescing": 0
+  }
 };
 
 module.exports = config;

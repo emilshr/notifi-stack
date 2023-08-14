@@ -2,11 +2,15 @@ import { prisma } from "../db";
 import { ZodError } from "zod";
 import superjson from "superjson";
 import { TRPCError, initTRPC } from "@trpc/server";
-import { verifyAccessToken } from "@/services/sign-hash.service";
+import { decryptData } from "@/services/sign-hash.service";
 
 interface PackageContext {
-  accessToken: string | null;
+  projectApiKey: string | null;
   projectId: string | null;
+  host: string;
+  location: string;
+  origin: string;
+  cookie: string;
 }
 
 export const createPackageTRPCContext = (opts: PackageContext) => {
@@ -33,35 +37,34 @@ const packageT = initTRPC.context<typeof createPackageTRPCContext>().create({
 export const createPackageTRPCRouter = packageT.router;
 
 const isClientAuthorized = packageT.middleware(async ({ ctx, next }) => {
-  if (!ctx.accessToken) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-  const { prisma, accessToken } = ctx;
+  const { projectApiKey, projectId, prisma } = ctx;
 
-  const foundToken = await prisma.clientAccessTokens.findFirst({
-    where: { token: accessToken },
-    include: {
-      clientAccessTokenSecret: {
-        select: {
-          accessTokenSecret: true,
+  if (projectApiKey && projectId) {
+    const foundKey = await prisma.projectApiKeys.findFirst({
+      where: { hashedSecret: projectApiKey },
+      include: {
+        project: true,
+        projectSecret: {
+          select: {
+            projectSecret: true,
+          },
         },
       },
-      project: true,
-    },
-  });
+    });
 
-  if (foundToken) {
-    const {
-      token,
-      projectId,
-      clientAccessTokenSecret: { accessTokenSecret },
-      project,
-    } = foundToken;
-    if (verifyAccessToken(token, projectId, accessTokenSecret)) {
-      console.debug(`User trying to access project with ID: ${projectId}`);
-      return next({
-        ctx: project,
-      });
+    if (foundKey) {
+      const {
+        project,
+        projectSecret: { projectSecret },
+      } = foundKey;
+      const { id } = project;
+      console.log("decrypted data", decryptData(projectApiKey, projectSecret));
+      if (decryptData(projectApiKey, projectSecret) === id) {
+        console.debug(`User trying to access project with ID: ${projectId}`);
+        return next({
+          ctx: project,
+        });
+      }
     }
   }
 

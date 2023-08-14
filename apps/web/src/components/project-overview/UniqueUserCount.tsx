@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Snippet } from "@nextui-org/react";
+import { Card, CardBody, CardHeader } from "@nextui-org/react";
 
 type Props = {
   count: number;

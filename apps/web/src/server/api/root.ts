@@ -1,4 +1,4 @@
-import { createTRPCRouter } from "@/server/api/trpc";
+import { createTRPCRouter as PackageHelper } from "@/server/api/trpc";
 import { projectsRouter } from "./routers/projects";
 import { packageRoutes } from "./routers/package.routes";
 import { createPackageTRPCRouter } from "./package-trpc";
@@ -8,7 +8,7 @@ import { createPackageTRPCRouter } from "./package-trpc";
  *
  * All routers added in /api/routers should be manually added here.
  */
-export const appRouter = createTRPCRouter({
+export const appRouter = PackageHelper({
   projects: projectsRouter,
 });
 

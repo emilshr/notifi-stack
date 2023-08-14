@@ -7,16 +7,20 @@ export const generateNewTokenSecret = () => {
 };
 
 export const encryptData = (projectId: string, projectSecretToken: string) => {
-  return crypto.AES.encrypt(projectId, projectSecretToken).toString();
+  const cipherText = crypto.AES.encrypt(
+    projectId,
+    projectSecretToken
+  ).toString();
+  return cipherText;
 };
 
 export const decryptData = (
   encryptedData: string,
   projectSecretToken: string
 ) => {
-  return crypto.AES.decrypt(encryptedData, projectSecretToken).toString(
-    crypto.enc.Utf8
-  );
+  const decryptedData = crypto.AES.decrypt(encryptedData, projectSecretToken);
+
+  return decryptedData.toString(crypto.enc.Utf8);
 };
 
 export const signJwtToken = (projectId: string, tokenSecret: string) => {

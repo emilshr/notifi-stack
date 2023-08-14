@@ -62,18 +62,16 @@ export const projectsRouter = createTRPCRouter({
         },
       });
       const { id: projectId } = createdProject;
-      const hashedSecret = encryptData(projectId, generateNewTokenSecret());
-      await prisma.projectSecrets.create({
-        data: { projectSecret: hashedSecret, projectId },
-      });
-      await prisma.clientAccessTokenSecrets.create({
+      const projectSecret = generateNewTokenSecret();
+      const hashedSecret = encryptData(projectId, projectSecret);
+      const { id: projectSecretId } = await prisma.projectSecrets.create({
         data: {
-          accessTokenSecret: encryptData(projectId, generateNewTokenSecret()),
+          projectSecret,
           projectId,
         },
       });
       await prisma.projectApiKeys.create({
-        data: { projectId, hashedSecret, name: "API Key" },
+        data: { projectId, hashedSecret, name: "API Key", projectSecretId },
       });
       return createdProject;
     }),
@@ -120,12 +118,6 @@ export const projectsRouter = createTRPCRouter({
         include: {
           project: {
             include: {
-              ClientAccessTokenSecrets: {
-                where: { project: { id: projectId } },
-                select: {
-                  accessTokenSecret: true,
-                },
-              },
               ProjectSecrets: {
                 where: {
                   Project: {
@@ -150,17 +142,10 @@ export const projectsRouter = createTRPCRouter({
         })
       );
       if (foundData[0]) {
-        const { ClientAccessTokenSecrets, ProjectSecrets } =
-          foundData[0].project;
-        if (ClientAccessTokenSecrets && ProjectSecrets) {
+        const { ProjectSecrets } = foundData[0].project;
+        if (ProjectSecrets) {
           return {
             apiKeys,
-            accessTokenSecret: {
-              secret: `${API_TEMPLATE}${ClientAccessTokenSecrets.accessTokenSecret.slice(
-                ClientAccessTokenSecrets.accessTokenSecret.length - 4,
-                ClientAccessTokenSecrets.accessTokenSecret.length - 1
-              )}`,
-            },
             projectSecret: {
               secret: `${API_TEMPLATE}${ProjectSecrets.projectSecret.slice(
                 ProjectSecrets.projectSecret.length - 4,
@@ -194,43 +179,25 @@ export const projectsRouter = createTRPCRouter({
           hashedSecret: encryptData(projectId, projectSecret),
           name,
           projectId,
+          projectSecretId: foundProjectSecret.id,
         },
       });
-    }),
-  createNewAccessTokenSecret: protectedProcedure
-    .input(z.object({ projectId: z.string() }))
-    .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
-      const secret = generateNewTokenSecret();
-      await prisma.clientAccessTokenSecrets.upsert({
-        create: { accessTokenSecret: secret, projectId },
-        update: { accessTokenSecret: secret },
-        where: { projectId },
-      });
-
-      return {
-        tokenSecret: `${API_TEMPLATE}${secret.slice(
-          secret.length - 4,
-          secret.length - 1
-        )}`,
-      };
     }),
   createNewApiKeySecret: protectedProcedure
     .input(z.object({ projectId: z.string() }))
     .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
-      const secret = generateNewTokenSecret();
-
-      console.log({ secret });
+      const projectSecret = generateNewTokenSecret();
 
       await prisma.projectSecrets.upsert({
-        create: { projectSecret: secret, projectId },
-        update: { projectSecret: secret },
+        create: { projectSecret, projectId },
+        update: { projectSecret },
         where: { projectId },
       });
 
       return {
-        tokenSecret: `${API_TEMPLATE}${secret.slice(
-          secret.length - 4,
-          secret.length - 1
+        tokenSecret: `${API_TEMPLATE}${projectSecret.slice(
+          projectSecret.length - 4,
+          projectSecret.length - 1
         )}`,
       };
     }),

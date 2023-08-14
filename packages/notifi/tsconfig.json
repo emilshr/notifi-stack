@@ -9,16 +9,12 @@
     "noEmit": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
-    "typeRoots": ["./node_modules/@types/"],
+    "typeRoots": ["./node_modules/@types/", "../../apps/web/node_modules/@types/"],
     "paths": {
-      "@web/*": ["../../apps/web/*"]
-    }
+      "@web/*": ["../../apps/web/*"],
+    },
+    "jsx": "react-jsx"
   },
-  "references": [
-    {
-      "path": "../../apps/web/tsconfig.json"
-    }
-  ],
   "include": [
     "**/*.ts",
   ],

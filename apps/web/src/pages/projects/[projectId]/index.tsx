@@ -1,56 +1,8 @@
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import { appRouter } from "@/server/api/root";
-import { createInnerTRPCContext } from "@/server/api/trpc";
-import SuperJSON from "superjson";
-import { getServerAuthSession } from "@/server/auth";
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from "next";
-import type { ParsedUrlQuery } from "querystring";
-import { CreateFirstKeyAlert } from "../../../components/project-dashboard/CreateFirstKeyAlert";
-import type { Project } from "@prisma/client";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
 import { ProjectOverview } from "@/components/project-overview/ProjectOverview";
 
-interface ProjectQueryParams extends ParsedUrlQuery {
-  projectId: string;
-}
-
-export const getServerSideProps = async ({
-  req,
-  res,
-  params: { projectId } = { projectId: "" },
-}: GetServerSidePropsContext<ProjectQueryParams>) => {
-  const session = await getServerAuthSession({ req, res });
-  const ssg = createServerSideHelpers({
-    router: appRouter,
-    ctx: createInnerTRPCContext({ session }),
-    transformer: SuperJSON,
-  });
-
-  const project = await ssg.projects.getProject.fetch({
-    projectId,
-  });
-
-  if (!project) {
-    return {
-      redirect: {
-        destination: "/404",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: { project: JSON.parse(JSON.stringify(project)) as Project },
-  };
-};
-
-export default function ProjectView({
-  project,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function ProjectView() {
   return (
     <SidePaneWrapper>
       <SectionHeader

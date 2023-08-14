@@ -1,6 +1,4 @@
 import { Button, Header } from "ui";
-import { Connection } from "@emilshr/notifi";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function Page() {
@@ -14,6 +12,13 @@ export default function Page() {
         }}
       >
         Error
+      </button>
+      <button
+        onClick={() => {
+          console.log("sentence");
+        }}
+      >
+        Log
       </button>
       <Link href="/second">Second</Link>
     </>

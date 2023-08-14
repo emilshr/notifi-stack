@@ -1,4 +1,4 @@
-export type TableColumnHeader<T = undefined> = {
-  key: keyof T | string;
+export type TableColumnHeader = {
+  key: string;
   label: string;
 };

@@ -10,13 +10,17 @@ const nextHandler = createNextApiHandler({
   createContext: (opts) => {
     const {
       req: {
-        headers: { authorization = null, projectId = null },
+        headers: { host = "", location = "", cookie = "", origin = "" },
       },
     } = opts;
 
     return createPackageTRPCContext({
-      accessToken: authorization,
-      projectId: projectId as string | null,
+      projectApiKey: opts.req.headers["x-api-key"] as string | null,
+      projectId: opts.req.headers["project-id"] as string | null,
+      cookie,
+      host,
+      location,
+      origin,
     });
   },
   onError:

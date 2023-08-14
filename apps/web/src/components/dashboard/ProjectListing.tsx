@@ -4,7 +4,6 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import CardBackground from "../../../public/icons/line_background.svg";
 
 export const ProjectListing = () => {
   const [cursor, setCursor] = useState<string | undefined>(undefined);
