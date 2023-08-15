@@ -17,7 +17,7 @@ interface Props {
   loading: boolean;
 }
 
-export const KeyRotationAlert = ({
+const KeyRotationAlert = ({
   onConfirm,
   title,
   description,
@@ -57,3 +57,5 @@ export const KeyRotationAlert = ({
     </Modal>
   );
 };
+
+export default KeyRotationAlert;

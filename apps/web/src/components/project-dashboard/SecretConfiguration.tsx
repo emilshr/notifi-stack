@@ -2,8 +2,10 @@ import { ProjectSectionWrapper } from "../ProjectSectionWrapper";
 import { api } from "@/utils/api";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { KeyRotationAlert } from "./KeyRotationAlert";
 import { Button, Input } from "@nextui-org/react";
+import dynamic from "next/dynamic";
+
+const KeyRotationAlert = dynamic(() => import('./KeyRotationAlert'))
 
 interface Props {
   secret: string;
