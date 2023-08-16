@@ -24,7 +24,7 @@ export const CreateNewProject = () => {
         </Button>
         <ProjectModal onClose={() => setOpen(false)} open={open} />
       </div>
-      {!data && (
+      {!isFetching && !data && (
         <AlertBanner
           title="Upgrade to create unlimited projects"
           content="Only a maximum of 3 projects can be created in the free tier"
