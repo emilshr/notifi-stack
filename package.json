@@ -20,8 +20,7 @@
   },
   "name": "notifi-stack",
   "workspaces": [
-    "apps/web/*",
-    "apps/docs/*",
+    "apps/*",
     "packages/*"
   ]
 }
