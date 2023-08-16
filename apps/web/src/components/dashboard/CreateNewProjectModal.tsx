@@ -24,7 +24,8 @@ const CreateNewProjectModal = ({ onClose, open }: Props) => {
 
   const { mutate, isLoading } = api.projects.createProject.useMutation({
     onSuccess() {
-      projects.getProjects.invalidate();
+      projects.getProjects.refetch();
+      projects.canUserCreateProjects.refetch();
     },
   });
 

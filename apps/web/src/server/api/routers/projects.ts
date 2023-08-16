@@ -13,6 +13,7 @@ import { TRPCError } from "@trpc/server";
 import { getRandomBackgroundUrl } from "@/common/background-generator";
 
 const API_TEMPLATE = "NOTIFI-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+const PROJECT_COUNT_LIMIT = 3;
 
 export const projectsRouter = createTRPCRouter({
   /**
@@ -107,7 +108,11 @@ export const projectsRouter = createTRPCRouter({
     .mutation(async ({ ctx: { prisma }, input: { projectId } }) => {
       return await prisma.project.delete({
         where: { id: projectId },
-        include: { ProjectApiKeys: true },
+        include: {
+          ProjectApiKeys: true,
+          ErrorLogs: true,
+          ProjectSecrets: true,
+        },
       });
     }),
   getSecretAndApiKeys: protectedProcedure
@@ -233,4 +238,17 @@ export const projectsRouter = createTRPCRouter({
         apiConsumption,
       };
     }),
+  canUserCreateProjects: protectedProcedure.query(
+    async ({
+      ctx: {
+        prisma,
+        session: {
+          user: { id },
+        },
+      },
+    }) => {
+      const count = await prisma.project.count({ where: { userId: id } });
+      return count < PROJECT_COUNT_LIMIT;
+    },
+  ),
 });

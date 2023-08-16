@@ -3,21 +3,9 @@ import { api } from "@/utils/api";
 import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 export const ProjectListing = () => {
-  const [cursor, setCursor] = useState<string | undefined>(undefined);
-
-  const { data, isFetched, isFetching } = api.projects.getProjects.useQuery({
-    cursor,
-  });
-
-  useEffect(() => {
-    if (data) {
-      const { nextCursor } = data;
-      setCursor(nextCursor);
-    }
-  }, [isFetched, data]);
+  const { data, isFetching } = api.projects.getProjects.useQuery({});
 
   if (isFetching) {
     return (

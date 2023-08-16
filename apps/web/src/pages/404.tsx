@@ -1,5 +1,6 @@
 import { Button } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Page() {
   const { status } = useSession();
@@ -12,9 +13,13 @@ export default function Page() {
       </div>
       <div>
         {status === "authenticated" ? (
-          <Button color="secondary">Go back to dashboard</Button>
+          <Link href="/dashboard">
+            <Button color="secondary">Go back to dashboard</Button>
+          </Link>
         ) : (
-          <Button color="secondary">Go home</Button>
+          <Link href="/">
+            <Button color="secondary">Go home</Button>
+          </Link>
         )}
       </div>
     </div>

@@ -90,7 +90,7 @@ model ProjectSecrets {
     projectId     String   @unique
     createdAt     DateTime @default(now())
 
-    Project        Project          @relation(fields: [projectId], references: [id])
+    Project        Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
     ProjectApiKeys ProjectApiKeys[]
 }
 
@@ -116,7 +116,7 @@ model ErrorLogs {
     colNo     Int?
     message   String?
     stack     String?
-    project   Project  @relation(fields: [projectId], references: [id])
+    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
