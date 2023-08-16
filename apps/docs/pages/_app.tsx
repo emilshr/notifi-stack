@@ -1,12 +1,14 @@
 import { NotifiWrapper } from "@emilshr/notifi";
 import { AppType } from "next/app";
 
+import { env } from "../env.mjs";
+
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <NotifiWrapper
-      projectApiKey="U2FsdGVkX1+X/zolnEDMMCHwJm6C415YbEgeUqNK6wGiucwTcdsTLzPEbAclLxOH"
-      projectId="cllb24n140007yys62as1wwy6"
-      connectionEndpoint="http://localhost:3000"
+      projectApiKey={env.NEXT_PUBLIC_PROJECT_API_KEY}
+      projectId={env.NEXT_PUBLIC_PROJECT_ID}
+      connectionEndpoint={env.NEXT_PUBLIC_CONNECTION_ENDPOINT}
     >
       <Component {...pageProps} />
     </NotifiWrapper>

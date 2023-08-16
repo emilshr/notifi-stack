@@ -1,3 +1,4 @@
+import { AlertBanner } from "@/components/AlertBanner";
 import { CommonPaddingWrapper } from "@/components/CommonPaddingWrapper";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { ProjectListing } from "@/components/dashboard/ProjectListing";
@@ -9,6 +10,10 @@ const Dashboard: NextPage = () => {
       <CommonPaddingWrapper>
         <div className="flex flex-col gap-y-4">
           <DashboardHeader />
+          <AlertBanner
+            title="Upgrade to create unlimited projects"
+            content="Only a maximum of 3 projects can be created in the free tier"
+          />
           <ProjectListing />
         </div>
       </CommonPaddingWrapper>

@@ -9,14 +9,14 @@ export const generateNewTokenSecret = () => {
 export const encryptData = (projectId: string, projectSecretToken: string) => {
   const cipherText = crypto.AES.encrypt(
     projectId,
-    projectSecretToken
+    projectSecretToken,
   ).toString();
   return cipherText;
 };
 
 export const decryptData = (
   encryptedData: string,
-  projectSecretToken: string
+  projectSecretToken: string,
 ) => {
   const decryptedData = crypto.AES.decrypt(encryptedData, projectSecretToken);
 
@@ -30,7 +30,7 @@ export const signJwtToken = (projectId: string, tokenSecret: string) => {
 export const verifyAccessToken = (
   accessToken: string,
   projectId: string,
-  tokenSecret: string
+  tokenSecret: string,
 ) => {
   const decodedToken = jwt.verify(accessToken, tokenSecret) as
     | {

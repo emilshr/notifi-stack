@@ -8,6 +8,9 @@ import {
   TableCell,
   getKeyValue,
   Pagination,
+  type Selection,
+  type SelectionMode,
+  Skeleton,
 } from "@nextui-org/react";
 import type { TableColumnHeader } from "@/common/types";
 
@@ -17,9 +20,13 @@ type Props<T> = {
   columnHeaders: TableColumnHeader[];
   onPageChange: (updatedPageNumber: number) => void;
   loading: boolean;
+  currentPage?: number;
   displayPagination?: boolean;
-  renderCell?: (item: T, columnKey: string) => JSX.Element;
-  rowCount?: number;
+  renderCell?: (item: T, columnKey: keyof T) => JSX.Element;
+  totalPages?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSelectionChange?: (selectedKeys: Selection) => any;
+  selectionMode?: SelectionMode;
 };
 
 export const DataGrid = <T,>({
@@ -28,12 +35,20 @@ export const DataGrid = <T,>({
   itemKey,
   displayPagination = false,
   renderCell,
-  rowCount = 10,
+  totalPages = 1,
   onPageChange,
+  currentPage = 1,
+  onSelectionChange,
+  selectionMode = "single",
+  loading,
 }: Props<T>) => {
   return (
     <>
-      <Table isStriped>
+      <Table
+        isHeaderSticky
+        selectionMode={selectionMode}
+        onSelectionChange={onSelectionChange}
+      >
         <TableHeader columns={columnHeaders}>
           {(column) => (
             <TableColumn
@@ -47,14 +62,27 @@ export const DataGrid = <T,>({
         </TableHeader>
         <TableBody
           items={data}
-          emptyContent={<>Yay! No errors reported. All cool!</>}
+          isLoading={loading}
+          loadingContent={
+            <div className="space-y-3">
+              <Skeleton className="w-3/5 rounded-lg">
+                <div className="h-3 w-full rounded-lg bg-secondary"></div>
+              </Skeleton>
+              <Skeleton className="w-4/5 rounded-lg">
+                <div className="h-3 w-full rounded-lg bg-secondary-300"></div>
+              </Skeleton>
+              <Skeleton className="w-2/5 rounded-lg">
+                <div className="h-3 w-full rounded-lg bg-secondary-200"></div>
+              </Skeleton>
+            </div>
+          }
         >
           {(item) => (
-            <TableRow key={item[itemKey] as string}>
+            <TableRow key={item[itemKey] as string} className="cursor-pointer">
               {(columnKey) => (
                 <TableCell>
                   {renderCell
-                    ? renderCell(item, columnKey as string)
+                    ? renderCell(item, columnKey as keyof T)
                     : getKeyValue(item, columnKey)}
                 </TableCell>
               )}
@@ -64,12 +92,14 @@ export const DataGrid = <T,>({
       </Table>
       {displayPagination && (
         <Pagination
-          total={rowCount}
-          initialPage={0}
+          page={currentPage}
+          total={totalPages}
+          initialPage={1}
           isCompact
           showControls
           showShadow
           onChange={onPageChange}
+          loop
         />
       )}
     </>

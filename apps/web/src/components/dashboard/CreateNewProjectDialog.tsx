@@ -2,8 +2,7 @@ import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 
-const ProjectModal = dynamic(() => import('./CreateNewProjectModal'));
-
+const ProjectModal = dynamic(() => import("./CreateNewProjectModal"));
 
 export const CreateNewProject = () => {
   const [open, setOpen] = useState(false);

@@ -7,6 +7,15 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**/*"]
     },
+    "docs#build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": [
+        "NEXT_PUBLIC_PROJECT_API_KEY",
+        "NEXT_PUBLIC_PROJECT_ID",
+        "NEXT_PUBLIC_CONNECTION_ENDPOINT"
+      ]
+    },
     "web#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"],
@@ -35,7 +44,8 @@
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET",
         "NODE_ENV",
-        "PORT"
+        "PORT",
+        "NEXT_PUBLIC_*"
       ]
     },
     "update-schema": {

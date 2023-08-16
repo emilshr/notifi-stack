@@ -4,7 +4,9 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-const DeleteProjectConfirmationModal = dynamic(() => import('./DeleteProjectConfirmationModal'))
+const DeleteProjectConfirmationModal = dynamic(
+  () => import("./DeleteProjectConfirmationModal"),
+);
 
 type Props = {
   projectId: string;
@@ -28,7 +30,12 @@ export const DeleteProject = ({ projectId }: Props) => {
       >
         Delete project
       </Button>
-        <DeleteProjectConfirmationModal open={open} onClose={() => setOpen(false)} isLoading={isLoading} onDelete={() => mutate({ projectId })} />
+      <DeleteProjectConfirmationModal
+        open={open}
+        onClose={() => setOpen(false)}
+        isLoading={isLoading}
+        onDelete={() => mutate({ projectId })}
+      />
     </>
   );
 };

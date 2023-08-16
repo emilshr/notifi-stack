@@ -1,9 +1,15 @@
+import { env } from "@/env.mjs";
 import { DocsIcon } from "@/svg-icons/docs-icon";
 import { Button, Snippet } from "@nextui-org/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useState } from "react";
 
 export const HomeScreenWidget = () => {
   const router = useRouter();
+  const { status } = useSession();
+  const [loading, setLoading] = useState(false);
+
   return (
     <div className="flex h-full flex-col justify-center gap-y-24 px-0 lg:px-10 xl:px-40">
       <div className="flex flex-col items-center gap-y-8">
@@ -17,17 +23,43 @@ export const HomeScreenWidget = () => {
       </div>
       <div className="flex flex-col items-center justify-center gap-y-4">
         <div className="flex gap-x-4">
-          <Button
-            size="lg"
-            color="primary"
-            radius="sm"
-            style={{
-              fontWeight: 600,
-            }}
-            onClick={() => router.push("/dashboard")}
-          >
-            Get started
-          </Button>
+          {status === "authenticated" ? (
+            <Button
+              size="lg"
+              color="primary"
+              radius="sm"
+              style={{
+                fontWeight: 600,
+              }}
+              onClick={() => router.push("/dashboard")}
+            >
+              Get started
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              color="primary"
+              radius="sm"
+              style={{
+                fontWeight: 600,
+              }}
+              isLoading={loading}
+              onClick={(event) => {
+                event.preventDefault();
+                setLoading(true);
+                signIn("github", {
+                  callbackUrl:
+                    env.NEXT_PUBLIC_NODE_ENV === "development"
+                      ? "http://localhost:3000/dashboard"
+                      : `${window.location.href}dashboard`,
+                }).finally(() => {
+                  setLoading(false);
+                });
+              }}
+            >
+              Sign in to get started
+            </Button>
+          )}
           <a href="https://www.docs.notifi.com" target="_blank">
             <Button
               size="lg"

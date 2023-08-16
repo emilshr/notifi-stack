@@ -146,5 +146,5 @@ export const paginatedPublicProcedure =
   publicProcedure.input(paginatedInputSchema);
 
 export const offsetPaginatedPrivateProcedure = protectedProcedure.input(
-  offsetPaginationInputSchema
+  offsetPaginationInputSchema,
 );

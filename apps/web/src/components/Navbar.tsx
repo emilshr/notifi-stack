@@ -5,6 +5,7 @@ import {
   Dropdown,
   DropdownItem,
   DropdownMenu,
+  DropdownSection,
   DropdownTrigger,
   Navbar,
   NavbarBrand,
@@ -15,6 +16,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { ThemeSwitcher } from "./ThemeSwitcher";
 import { useRouter } from "next/router";
+import { UpgradeIcon } from "@/svg-icons/upgrade-icon";
 
 export const CustomNavbar = () => {
   const { data, status } = useSession();
@@ -63,27 +65,33 @@ export const CustomNavbar = () => {
               aria-label="Profile Actions"
               variant="flat"
               onAction={(key) => {
-                console.log({ key }, "action");
-                if (key === "dashboard") {
-                  router.push("/dashboard");
+                if (key === "logout") {
+                  signOut({ redirect: true, callbackUrl: "/" });
+                } else {
+                  router.push(`/${key}`);
                 }
               }}
             >
-              <DropdownItem
-                key="profile"
-                className="h-14 gap-2"
-                disableAnimation
-              >
-                <p className="font-semibold">Signed in as</p>
-                <p className="font-semibold">{data.user.email}</p>
-              </DropdownItem>
-              <DropdownItem key="dashboard">Dashboard</DropdownItem>
-              <DropdownItem key="settings">My Settings</DropdownItem>
-              <DropdownItem
-                key="logout"
-                color="danger"
-                onClick={() => signOut({ redirect: true, callbackUrl: "/" })}
-              >
+              <DropdownSection showDivider>
+                <DropdownItem
+                  key="profile"
+                  className="h-14 gap-2"
+                  disableAnimation
+                >
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{data.user.email}</p>
+                </DropdownItem>
+                <DropdownItem key="dashboard">Dashboard</DropdownItem>
+                <DropdownItem
+                  key="pricing"
+                  endContent={<UpgradeIcon />}
+                  description="You're currently on the free tier. Click to upgrade!"
+                  color="success"
+                >
+                  Upgrade
+                </DropdownItem>
+              </DropdownSection>
+              <DropdownItem key="logout" color="danger">
                 Log Out
               </DropdownItem>
             </DropdownMenu>

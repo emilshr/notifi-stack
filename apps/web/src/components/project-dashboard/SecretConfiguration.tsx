@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Button, Input } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 
-const KeyRotationAlert = dynamic(() => import('./KeyRotationAlert'))
+const KeyRotationAlert = dynamic(() => import("./KeyRotationAlert"));
 
 interface Props {
   secret: string;

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@nextui-org/react";
 import dynamic from "next/dynamic";
 
-const NewApiKeyModal = dynamic(() => import('./CreateNewApiKeyModal'))
+const NewApiKeyModal = dynamic(() => import("./CreateNewApiKeyModal"));
 
 export const CreateNewApiKey = () => {
   const [open, setOpen] = useState(false);

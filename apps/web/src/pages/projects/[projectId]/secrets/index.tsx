@@ -7,6 +7,7 @@ import { SecretConfiguration } from "@/components/project-dashboard/SecretConfig
 import { appRouter } from "@/server/api/root";
 import { createInnerTRPCContext } from "@/server/api/trpc";
 import { getServerAuthSession } from "@/server/auth";
+import { Snippet } from "@nextui-org/react";
 import { createServerSideHelpers } from "@trpc/react-query/server";
 import type {
   GetServerSidePropsContext,
@@ -45,13 +46,17 @@ export const getServerSideProps = async ({
   }
 
   return {
-    props: JSON.parse(JSON.stringify(output)) as typeof output,
+    props: {
+      ...(JSON.parse(JSON.stringify(output)) as typeof output),
+      projectId,
+    },
   };
 };
 
 export default function Secrets({
   apiKeys,
   projectSecret,
+  projectId,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <SidePaneWrapper>
@@ -59,13 +64,19 @@ export default function Secrets({
         title="Project API keys"
         description="View and manage your private API keys here"
       />
+      <ProjectSectionWrapper
+        sectionTitle="Project ID"
+        sectionDescription="This is the ID to pass into the module to enable crash reports"
+      >
+        <Snippet hideSymbol>{projectId}</Snippet>
+      </ProjectSectionWrapper>
       <SecretConfiguration {...projectSecret} />
       <ProjectSectionWrapper
         sectionTitle="Standard keys"
         sectionDescription="These keys will allow you to authenticate API requests"
         actionComponent={<CreateNewApiKey />}
       >
-        <ApiKeyList apiKeys={apiKeys} />
+        <ApiKeyList apiKeys={apiKeys} projectId={projectId} />
       </ProjectSectionWrapper>
     </SidePaneWrapper>
   );

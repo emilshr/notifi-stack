@@ -108,9 +108,8 @@ model ProjectApiKeys {
 model ErrorLogs {
     id        String   @id @default(cuid())
     projectId String
-    location  String
+    userAgent String
     host      String
-    cookie    String
     origin    String
     source    String?
     lineNo    Int?

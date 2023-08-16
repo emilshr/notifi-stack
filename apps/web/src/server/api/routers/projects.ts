@@ -38,7 +38,7 @@ export const projectsRouter = createTRPCRouter({
         items,
         nextCursor,
       };
-    }
+    },
   ),
   /**
    * @description Endpoint to create a project. Every project will be associated with a user entity
@@ -92,7 +92,7 @@ export const projectsRouter = createTRPCRouter({
         projectId: z.string(),
         name: z.string(),
         description: z.string().optional(),
-      })
+      }),
     )
     .mutation(
       async ({ ctx: { prisma }, input: { projectId, name, description } }) => {
@@ -100,7 +100,7 @@ export const projectsRouter = createTRPCRouter({
           where: { id: projectId },
           data: { name, description },
         });
-      }
+      },
     ),
   deleteProject: protectedProcedure
     .input(z.object({ projectId: z.string() }))
@@ -139,7 +139,7 @@ export const projectsRouter = createTRPCRouter({
           id,
           name,
           createdAt,
-        })
+        }),
       );
       if (foundData[0]) {
         const { ProjectSecrets } = foundData[0].project;
@@ -149,7 +149,7 @@ export const projectsRouter = createTRPCRouter({
             projectSecret: {
               secret: `${API_TEMPLATE}${ProjectSecrets.projectSecret.slice(
                 ProjectSecrets.projectSecret.length - 4,
-                ProjectSecrets.projectSecret.length - 1
+                ProjectSecrets.projectSecret.length - 1,
               )}`,
             },
           };
@@ -197,7 +197,7 @@ export const projectsRouter = createTRPCRouter({
       return {
         tokenSecret: `${API_TEMPLATE}${projectSecret.slice(
           projectSecret.length - 4,
-          projectSecret.length - 1
+          projectSecret.length - 1,
         )}`,
       };
     }),
@@ -224,7 +224,7 @@ export const projectsRouter = createTRPCRouter({
     .query(async ({ ctx: { prisma }, input: { projectId } }) => {
       const [dailyReports, apiConsumption] = await prisma.$transaction([
         prisma.errorLogs.count({
-          where: { createdAt: { gte: new Date() }, projectId },
+          where: { createdAt: { lte: new Date() }, projectId },
         }),
         prisma.projectApiKeys.count({ where: { projectId } }),
       ]);

@@ -1,16 +1,24 @@
 import { api } from "@/utils/api";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Input } from "@nextui-org/react";
+import {
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Input,
+} from "@nextui-org/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 interface Props {
-    open: boolean;
-    onClose: () => void;
+  open: boolean;
+  onClose: () => void;
 }
 
 const CreateNewApiKeyModal = ({ onClose, open }: Props) => {
-    const [name, setName] = useState("");
+  const [name, setName] = useState("");
 
   const router = useRouter();
   const {
@@ -27,35 +35,37 @@ const CreateNewApiKeyModal = ({ onClose, open }: Props) => {
     },
   });
 
-    return <Modal isOpen={open} onOpenChange={onClose} backdrop="blur">
-    <ModalContent>
-      <ModalHeader>New API Key</ModalHeader>
-      <ModalBody>
-        <Input
-          required
-          onChange={(event) => {
-            event.stopPropagation();
-            setName(event.currentTarget.value);
-          }}
-          label="API Key identifier"
-        />
-      </ModalBody>
-      <ModalFooter>
-        <div className="flex w-full justify-end">
-          <Button
-            color="primary"
-            onClick={() => {
-              mutate({ name, projectId: projectId as string });
+  return (
+    <Modal isOpen={open} onOpenChange={onClose} backdrop="blur">
+      <ModalContent>
+        <ModalHeader>New API Key</ModalHeader>
+        <ModalBody>
+          <Input
+            required
+            onChange={(event) => {
+              event.stopPropagation();
+              setName(event.currentTarget.value);
             }}
-            disabled={name === ""}
-            isLoading={isLoading}
-          >
-            Create
-          </Button>
-        </div>
-      </ModalFooter>
-    </ModalContent>
-  </Modal>
-}
+            label="API Key identifier"
+          />
+        </ModalBody>
+        <ModalFooter>
+          <div className="flex w-full justify-end">
+            <Button
+              color="primary"
+              onClick={() => {
+                mutate({ name, projectId: projectId as string });
+              }}
+              disabled={name === ""}
+              isLoading={isLoading}
+            >
+              Create
+            </Button>
+          </div>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
+};
 
-export default CreateNewApiKeyModal
+export default CreateNewApiKeyModal;

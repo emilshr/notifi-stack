@@ -12,7 +12,7 @@ const nextApiHandler = createNextApiHandler({
     env.NODE_ENV === "development"
       ? ({ path, error }) => {
           console.error(
-            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
+            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
           );
         }
       : undefined,
@@ -21,7 +21,7 @@ const nextApiHandler = createNextApiHandler({
 // eslint-disable-next-line @typescript-eslint/require-await
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   return nextApiHandler(req, res);
 }

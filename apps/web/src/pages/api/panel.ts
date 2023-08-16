@@ -8,6 +8,6 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     renderTrpcPanel(appRouter, {
       url: "http://localhost:3000/api/trpc",
       transformer: "superjson",
-    })
+    }),
   );
 }

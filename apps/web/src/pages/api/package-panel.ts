@@ -9,6 +9,6 @@ export default async function handler(_: NextApiRequest, res: NextApiResponse) {
       url: "http://localhost:3000/api/packageTrpc",
       transformer: "superjson",
       logFailedProcedureParse: true,
-    })
+    }),
   );
 }

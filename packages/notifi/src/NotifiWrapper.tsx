@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { loggerLink, httpBatchLink, createTRPCProxyClient } from "@trpc/client";
-import type { PropsWithChildren } from "react";
-import type { PackageRouter } from "@web/src/server/api/root";
 import superjson from "superjson";
+import type { PropsWithChildren } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import type { PackageRouter } from "@web/src/server/api/root";
+import { loggerLink, httpBatchLink, createTRPCProxyClient } from "@trpc/client";
 
 export type NotifiWrapperProps = {
   projectApiKey: string;
@@ -42,10 +42,27 @@ export const NotifiWrapper = ({
 
   const registerErrorListeners = useCallback(() => {
     window.addEventListener("error", (ev) => {
-      const { message, error, colno, lineno } = ev;
+      const { message, colno, lineno, error } = ev;
+      if (logErrors) {
+        console.log(
+          "[NOTIFI] Error detected: ",
+          {
+            message,
+            colno,
+            lineno,
+            error,
+          },
+          error.stack
+        );
+      }
+      const parsedError = new Error(error);
+
       trpcClient.package.writeErrorLog
         .mutate({
-          error: { message },
+          error: {
+            message: parsedError.message,
+            stack: parsedError.stack,
+          },
           colNo: colno,
           lineNo: lineno,
         })

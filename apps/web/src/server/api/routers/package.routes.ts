@@ -2,13 +2,9 @@ import { z } from "zod";
 import {
   authorizedClientProcedure,
   createPackageTRPCRouter,
-  publicClientProcedure,
 } from "../package-trpc";
 
 export const packageRoutes = createPackageTRPCRouter({
-  test: publicClientProcedure.query(() => {
-    return { value: "OK" };
-  }),
   writeErrorLog: authorizedClientProcedure
     .input(
       z.object({
@@ -20,11 +16,17 @@ export const packageRoutes = createPackageTRPCRouter({
           message: z.string().optional(),
           stack: z.string().optional(),
         }),
-      })
+      }),
     )
     .mutation(
       async ({
-        ctx: { prisma, cookie, host, location, origin, id },
+        ctx: {
+          prisma,
+          host,
+          userAgent,
+          origin,
+          project: { id },
+        },
         input: {
           error: { message, stack },
           colNo,
@@ -32,12 +34,12 @@ export const packageRoutes = createPackageTRPCRouter({
           source,
         },
       }) => {
+        console.log({ message, stack });
         return await prisma.errorLogs.create({
           data: {
             projectId: id,
-            cookie,
             host,
-            location,
+            userAgent,
             origin,
             colNo,
             lineNo,
@@ -46,6 +48,6 @@ export const packageRoutes = createPackageTRPCRouter({
             message,
           },
         });
-      }
+      },
     ),
 });

@@ -31,7 +31,12 @@ const columnHeaders: TableColumnHeader[] = [
   },
 ];
 
-export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
+export const ApiKeyList = ({
+  apiKeys,
+}: {
+  apiKeys: CellProps[];
+  projectId: string;
+}) => {
   const renderCell = useCallback((apiKey: CellProps, columnKey: string) => {
     const cellValue = apiKey[columnKey as keyof CellProps];
 
@@ -77,6 +82,7 @@ export const ApiKeyList = ({ apiKeys }: { apiKeys: CellProps[] }) => {
       itemKey="id"
       loading={false}
       renderCell={renderCell}
+      selectionMode="none"
       onPageChange={(_updatedPage) => {
         console.log("Changing page");
       }}

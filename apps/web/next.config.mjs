@@ -18,6 +18,7 @@ const config = {
     locales: ["en"],
     defaultLocale: "en"
   },
+  optimizeFonts: false,
   transpilePackages: ["eslint-config-custom", "tsconfig"],
   images: {
     remotePatterns: [

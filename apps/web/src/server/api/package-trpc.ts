@@ -8,9 +8,8 @@ interface PackageContext {
   projectApiKey: string | null;
   projectId: string | null;
   host: string;
-  location: string;
+  userAgent: string;
   origin: string;
-  cookie: string;
 }
 
 export const createPackageTRPCContext = (opts: PackageContext) => {
@@ -62,7 +61,7 @@ const isClientAuthorized = packageT.middleware(async ({ ctx, next }) => {
       if (decryptData(projectApiKey, projectSecret) === id) {
         console.debug(`User trying to access project with ID: ${projectId}`);
         return next({
-          ctx: project,
+          ctx: { ...ctx, project },
         });
       }
     }

@@ -35,7 +35,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             <RouteGuard>
               <div className="flex h-screen w-full flex-col">
                 <CustomNavbar />
-                <div className="h-full px-4 py-4">
+                <div className="flex-1 px-4 py-4">
                   <Component {...pageProps} />
                 </div>
               </div>

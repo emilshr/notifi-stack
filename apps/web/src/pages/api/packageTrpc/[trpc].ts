@@ -10,16 +10,17 @@ const nextHandler = createNextApiHandler({
   createContext: (opts) => {
     const {
       req: {
-        headers: { host = "", location = "", cookie = "", origin = "" },
+        headers: { host = "", origin = "" },
       },
     } = opts;
+
+    console.log(opts.req.headers);
 
     return createPackageTRPCContext({
       projectApiKey: opts.req.headers["x-api-key"] as string | null,
       projectId: opts.req.headers["project-id"] as string | null,
-      cookie,
       host,
-      location,
+      userAgent: opts.req.headers["user-agent"] ?? "unidentified-agent",
       origin,
     });
   },
@@ -27,7 +28,7 @@ const nextHandler = createNextApiHandler({
     env.NODE_ENV === "development"
       ? ({ path, error }) => {
           console.error(
-            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
+            `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`,
           );
         }
       : undefined,
@@ -36,7 +37,7 @@ const nextHandler = createNextApiHandler({
 // eslint-disable-next-line @typescript-eslint/require-await
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   // We can use the response object to enable CORS
   res.setHeader("Access-Control-Allow-Origin", "*");

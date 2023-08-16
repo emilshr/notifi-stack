@@ -19,7 +19,7 @@ export default function Home() {
         <div className="flex w-full justify-between text-sm text-gray-700">
           <Navbar maxWidth="2xl">
             <NavbarBrand className="text-sm">
-              <div>&copy; {new Date().getFullYear()} @emilshr.com</div>
+              <div>&copy; {new Date().getFullYear()} @emilshr</div>
             </NavbarBrand>
             <div>
               <NavbarContent>
