@@ -1,6 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { Fragment, type PropsWithChildren, useEffect } from "react";
+import { CheckAuthDialog } from "./check-auth/CheckAuthDialog";
 
 const publicPaths = ["/", "/login", "/about"];
 
@@ -17,5 +18,10 @@ export const RouteGuard = ({ children }: PropsWithChildren) => {
     }
   }, [status, pathname, router]);
 
-  return <Fragment>{children}</Fragment>;
+  return (
+    <Fragment>
+      <CheckAuthDialog />
+      {children}
+    </Fragment>
+  );
 };
