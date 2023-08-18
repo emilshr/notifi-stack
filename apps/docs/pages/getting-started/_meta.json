@@ -1,4 +1,8 @@
 {
   "overview": "Overview",
-  "create-account": "Creating an account"
+  "create-account": "Creating an account",
+  "create-project": "Creating a project",
+  "setup-package": "Setting up the npm module",
+  "view-stats": "Viewing all errors",
+  "delete-project": "Deleting a project"
 }

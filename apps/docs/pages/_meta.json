@@ -1,8 +1,7 @@
 {
   "index": "Introduction",
   "getting-started": "Get started",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "key-rotations": "Private key secrets",
   "contact": {
     "title": "Contact ↗",
     "type": "page",
