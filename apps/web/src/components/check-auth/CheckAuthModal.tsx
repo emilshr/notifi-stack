@@ -15,11 +15,14 @@ const CheckAuthModal = ({ onClose, open }: Props) => {
   return (
     <Modal isOpen={open} onClose={onClose} hideCloseButton backdrop="blur">
       <ModalContent>
-        <ModalHeader className="flex w-full justify-center">
+        <ModalHeader className="flex w-full justify-center text-2xl">
           Checking for login status
         </ModalHeader>
         <ModalBody className="pb-4">
           <Spinner />
+          <span className="flex w-full justify-center text-small text-default-400">
+            Please hold on while we run the check
+          </span>
         </ModalBody>
       </ModalContent>
     </Modal>

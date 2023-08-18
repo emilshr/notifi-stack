@@ -7,7 +7,7 @@ const Dashboard: NextPage = () => {
   return (
     <div className="flex h-full w-full flex-col gap-y-6">
       <CommonPaddingWrapper>
-        <div className="flex flex-col gap-y-4">
+        <div className="flex h-full flex-col gap-y-4">
           <CreateNewProject />
           <ProjectListing />
         </div>

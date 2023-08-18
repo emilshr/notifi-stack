@@ -25,6 +25,8 @@ export const NavbarPrimaryAction = () => {
             className="rounded-full transition-transform"
             color="secondary"
             size="sm"
+            name={data.user.name || "User"}
+            showFallback
             classNames={{
               img: "h-[28px] rounded-full ring",
             }}
@@ -45,7 +47,9 @@ export const NavbarPrimaryAction = () => {
           <DropdownSection showDivider>
             <DropdownItem key="profile" className="h-14 gap-2" disableAnimation>
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{data.user.email}</p>
+              <p className="font-semibold">
+                {data.user.email || data.user.name}
+              </p>
             </DropdownItem>
             <DropdownItem key="dashboard">Dashboard</DropdownItem>
             <DropdownItem

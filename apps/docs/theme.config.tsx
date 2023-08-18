@@ -6,11 +6,8 @@ const config: DocsThemeConfig = {
   project: {
     link: "https://github.com/emilshr/notifi-stack",
   },
-  chat: {
-    link: "https://discord.com",
-  },
   footer: {
-    text: "Nextra Docs Template",
+    text: "Notifi documentation",
   },
 };
 

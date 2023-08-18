@@ -9,7 +9,7 @@ export const CheckAuthDialog = () => {
   const [open, setOpen] = useState(status === "loading");
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (status !== "loading") {
       setOpen(false);
     }
   }, [status]);
