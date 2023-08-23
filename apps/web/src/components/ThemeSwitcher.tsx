@@ -23,8 +23,7 @@ export const ThemeSwitcher = () => {
       isSelected={mounted.current ? theme === "dark" : false}
       startContent={<SunIcon />}
       endContent={<MoonIcon />}
-      onValueChange={(selected) => {
-        console.log({ selected });
+      onValueChange={(_selected) => {
         setTheme(theme === "light" ? "dark" : "light");
       }}
     ></Switch>

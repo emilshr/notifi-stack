@@ -57,7 +57,7 @@ const isClientAuthorized = packageT.middleware(async ({ ctx, next }) => {
         projectSecret: { projectSecret },
       } = foundKey;
       const { id } = project;
-      console.log("decrypted data", decryptData(projectApiKey, projectSecret));
+
       if (decryptData(projectApiKey, projectSecret) === id) {
         console.debug(`User trying to access project with ID: ${projectId}`);
         return next({

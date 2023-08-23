@@ -24,7 +24,7 @@ export const GettingStarted = () => {
         <NextUiLink
           color="primary"
           isExternal
-          href="https://www.docs.notifi.site"
+          href="https://docs.notifi.site"
           showAnchorIcon
         >
           Read more

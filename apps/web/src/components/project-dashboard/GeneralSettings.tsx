@@ -23,9 +23,9 @@ export const GeneralSettings = ({ project, loading }: Props) => {
   const [description, setDescription] = useState(projectDescription);
 
   const { isLoading, mutate } = api.projects.updateProject.useMutation({
-    onSuccess({ name, description }) {
-      setName(name);
-      setDescription(description);
+    onSuccess({ name: fetchedName, description: fetchedDescription }) {
+      setName(fetchedName);
+      setDescription(fetchedDescription);
       toast.success("Updated project details", { toastId: "project_update" });
     },
   });
