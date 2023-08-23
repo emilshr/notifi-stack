@@ -13,7 +13,17 @@ type Props = {
 
 const CheckAuthModal = ({ onClose, open }: Props) => {
   return (
-    <Modal isOpen={open} onClose={onClose} hideCloseButton backdrop="blur">
+    <Modal
+      isOpen={open}
+      onOpenChange={(modalState) => {
+        if (!modalState) {
+          onClose();
+        }
+      }}
+      hideCloseButton
+      backdrop="blur"
+      isDismissable={false}
+    >
       <ModalContent>
         <ModalHeader className="flex w-full justify-center text-2xl">
           Checking for login status
