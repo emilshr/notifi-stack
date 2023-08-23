@@ -1,20 +1,27 @@
-# Learn how to setup the npm package
+# Let's set up the package
 
-import { Tabs, Tab } from "nextra/components";
+import { Tabs, Tab, Callout, Steps } from "nextra/components";
 
-<Tabs items={["pnpm", "npm", "yarn"]} defaultIndex="1">
+<Steps>
+
+### Install the package
+
+Use your favourite package manager to install the npm package
+
+<Tabs items={["npm", "pnpm", "yarn"]} defaultIndex="0">
+
+<Tab>
+
+```bash copy
+npm install --save @emilshr/notifi
+```
+
+</Tab>
 
 <Tab>
 
 ```bash copy
 pnpm add @emilshr/notifi
-```
-
-</Tab>
-<Tab>
-
-```bash copy
-npm install --save @emilshr/notifi
 ```
 
 </Tab>
@@ -28,3 +35,121 @@ yarn add @emilshr/notifi
 </Tab>
 
 </Tabs>
+
+<Callout type="info">
+  The type definitions are also shipped in the same package. You don't need to
+  install any supporting library for type definitions
+</Callout>
+
+### Initialize the wrapper component
+
+<Tabs items={["Next.js app/", "Next.js pages/", "React"]} defaultIndex="0">
+
+<Tab>
+
+<Callout type="warning">
+  SSR is not currently supported. So you would have to import the wrapper
+  component in a separate file with the `"use client"` directive.
+</Callout>
+
+```typescript filename="components/CustomClientWrapper.tsx" {1, 3, 8-12, 14} copy
+"use client";
+
+import { NotifiWrapper } from "@emilshr/notifi";
+import type { PropsWithChildren } from "react";
+
+export const MyCustomNotifiWrapper = ({ children }: PropsWithChildren) => {
+  return (
+    <NotifiWrapper
+      connectionEndpoint="xxxx"
+      projectApiKey="xxxx"
+      projectId="xxxx"
+    >
+      {children}
+    </NotifiWrapper>
+  );
+};
+```
+
+```typescript filename="app/layout.tsx" {2, 13}
+// Import the custom wrapper into the root layout.tsx file
+import { MyCustomNotifiWrapper } from "@components/CustomClientWrapper.tsx";
+import type { PropsWithChildren } from "react";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <MyCustomNotifiWrapper>{children}</MyCustomNotifiWrapper>
+      </body>
+    </html>
+  );
+}
+```
+
+</Tab>
+<Tab>
+
+```typescript filename="pages/_app.tsx" {1, 6-10, 12} copy
+import { NotifiWrapper } from "@emilshr/notifi";
+import type { PropsWithChildren } from "react";
+
+export const MyCustomNotifiWrapper = ({ children }: PropsWithChildren) => {
+  return (
+    <NotifiWrapper
+      connectionEndpoint="xxxx"
+      projectApiKey="xxxx"
+      projectId="xxxx"
+    >
+      {children}
+    </NotifiWrapper>
+  );
+};
+```
+
+</Tab>
+<Tab>
+
+```typescript filename="src/index.tsx" {1, 4-8, 10}
+import { NotifiWrapper } from "@emilshr/notifi";
+
+ReactDOM.render(
+  <NotifiWrapper
+    connectionEndpoint="xxxx"
+    projectApiKey="xxxx"
+    projectId="xxxx"
+  >
+    <App />
+  </NotifiWrapper>,
+  document.getElementById("root")
+);
+```
+
+</Tab>
+
+</Tabs>
+
+</Steps>
+
+## What are these arguments for the wrapper component?
+
+1. `connectionEndpoint` - This is the URL of the domain where you've hosted the notifi dashboard
+2. `projectApiKey` - An API key issued from the project
+3. `projectId` - The public ID of the project
+
+## How do I set these values?
+
+The recommended way would be to use environment variables to set these values.
+
+## Working sandbox
+
+<iframe
+  width="800"
+  height="450"
+  src="https://codesandbox.io/p/sandbox/sad-cache-64xny6?embed=1"
+  allowFullScreen
+></iframe>
