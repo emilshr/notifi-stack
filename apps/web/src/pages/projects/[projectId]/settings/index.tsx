@@ -30,7 +30,7 @@ export default function Settings() {
         title="Project settings"
         description="Configure the settings for the project"
       />
-      <GeneralSettings project={data} />
+      <GeneralSettings project={data} loading={isFetched} />
     </SidePaneWrapper>
   );
 }

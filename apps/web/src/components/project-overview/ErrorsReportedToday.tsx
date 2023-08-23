@@ -1,11 +1,13 @@
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
 import { useCallback } from "react";
+import { SkeletonIndicator } from "../CustomSkeleton";
 
 type Props = {
   count: number;
+  isFetched: boolean;
 };
 
-export const ErrorsReportedToday = ({ count }: Props) => {
+export const ErrorsReportedToday = ({ count, isFetched }: Props) => {
   const getCountColor = useCallback(() => {
     if (count <= 10) {
       return "text-green-600";
@@ -30,7 +32,9 @@ export const ErrorsReportedToday = ({ count }: Props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <span className={`text-xl ${getCountColor()}`}>{count}</span>
+        <SkeletonIndicator isLoaded={isFetched}>
+          <span className={`text-xl ${getCountColor()}`}>{count}</span>
+        </SkeletonIndicator>
       </CardBody>
     </Card>
   );

@@ -1,10 +1,12 @@
 import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { SkeletonIndicator } from "../CustomSkeleton";
 
 type Props = {
   apiCount: number;
+  isFetched: boolean;
 };
 
-export const ApiUsage = ({ apiCount }: Props) => {
+export const ApiUsage = ({ apiCount, isFetched }: Props) => {
   return (
     <Card
       classNames={{
@@ -20,7 +22,9 @@ export const ApiUsage = ({ apiCount }: Props) => {
         </div>
       </CardHeader>
       <CardBody>
-        <span className="text-xl">{apiCount}</span>
+        <SkeletonIndicator isLoaded={isFetched}>
+          <span className="text-xl">{apiCount}</span>
+        </SkeletonIndicator>
       </CardBody>
     </Card>
   );
