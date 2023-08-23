@@ -1,7 +1,5 @@
 import React from "react";
-import { DocsThemeConfig, useConfig } from "nextra-theme-docs";
-import Link from "next/link";
-import PageHeader from "./components/PageHeader";
+import { DocsThemeConfig } from "nextra-theme-docs";
 import NotifiLogo from "./components/notifi_logo.png";
 import Image from "next/image";
 
@@ -14,7 +12,6 @@ const config: DocsThemeConfig = {
   footer: {
     text: "Notifi documentation",
   },
-  head: PageHeader,
   useNextSeoProps() {
     return {
       titleTemplate: "%s - Notifi",
@@ -24,7 +21,6 @@ const config: DocsThemeConfig = {
     labels: "Uh oh! Not found",
     content: <></>,
   },
-
   sidebar: {
     toggleButton: true,
   },

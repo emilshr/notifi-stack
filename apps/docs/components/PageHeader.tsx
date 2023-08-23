@@ -9,7 +9,7 @@ export default function PageHeader() {
       <meta property="og:title" content={frontMatter.title || "Notifi"} />
       <meta
         property="og:description"
-        content={frontMatter.description || "The next site builder"}
+        content={frontMatter.description || "Easy error reporting"}
       />
       <Link rel="icon" href="/favicon.ico" />
     </>
