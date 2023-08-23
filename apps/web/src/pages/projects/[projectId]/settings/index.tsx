@@ -1,62 +1,36 @@
-import { appRouter } from "@/server/api/root";
-import { createInnerTRPCContext } from "@/server/api/trpc";
-import { getServerAuthSession } from "@/server/auth";
-import type { Project } from "@prisma/client";
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-} from "next";
-import type { ParsedUrlQuery } from "querystring";
-import SuperJSON from "superjson";
 import { SectionHeader } from "@/components/SectionHeader";
 import { SidePaneWrapper } from "@/components/SidePaneWrapper";
 import { GeneralSettings } from "@/components/project-dashboard/GeneralSettings";
+import { api } from "@/utils/api";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
-interface ProjectQueryParams extends ParsedUrlQuery {
-  projectId: string;
-}
-
-export const getServerSideProps = async ({
-  req,
-  res,
-  params: { projectId } = { projectId: "" },
-}: GetServerSidePropsContext<ProjectQueryParams>) => {
-  const session = await getServerAuthSession({ req, res });
-  const ssg = createServerSideHelpers({
-    router: appRouter,
-    ctx: createInnerTRPCContext({ session }),
-    transformer: SuperJSON,
+export default function Settings() {
+  const {
+    query: { projectId },
+    push,
+  } = useRouter();
+  const { data, isFetched } = api.projects.getProject.useQuery({
+    projectId: projectId as string,
   });
 
-  const project = await ssg.projects.getProject.fetch({
-    projectId,
-  });
+  useEffect(() => {
+    if (isFetched && !data) {
+      push("/404");
+    }
+  }, [isFetched, data, push]);
 
-  if (!project) {
-    return {
-      redirect: {
-        destination: "/404",
-        permanent: false,
-      },
-    };
+  if (!data) {
+    return <></>;
   }
 
-  return {
-    props: { project: JSON.parse(JSON.stringify(project)) as Project },
-  };
-};
-
-export default function Settings({
-  project,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <SidePaneWrapper>
       <SectionHeader
         title="Project settings"
         description="Configure the settings for the project"
       />
-      <GeneralSettings project={project} />
+      <GeneralSettings project={data} />
     </SidePaneWrapper>
   );
 }

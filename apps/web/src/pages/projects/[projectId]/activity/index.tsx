@@ -70,13 +70,10 @@ export default function ActivityView() {
       projectId,
     });
 
-  const { data, isFetching, isLoading } =
-    api.projects.getProjectActivities.useQuery({
-      projectId,
-      skip: (currentPage - 1) * 10,
-    });
-
-  console.log({ isLoading, isFetching });
+  const { data, isFetching } = api.projects.getProjectActivities.useQuery({
+    projectId,
+    skip: (currentPage - 1) * 10,
+  });
 
   const renderCell = useCallback(
     (apiKey: ErrorLogs, columnKey: keyof ErrorLogs) => {
