@@ -22,7 +22,7 @@ const CreateNewProjectModal = ({ onClose, open }: Props) => {
 
   const { projects } = api.useContext();
 
-  const { mutate, isLoading } = api.projects.createProject.useMutation({
+  const { isLoading, mutateAsync } = api.projects.createProject.useMutation({
     onSuccess() {
       projects.getProjects.refetch();
       projects.canUserCreateProjects.refetch();
@@ -61,8 +61,9 @@ const CreateNewProjectModal = ({ onClose, open }: Props) => {
           <div className="flex w-full justify-end">
             <Button
               onClick={() => {
-                mutate({ projectName: name, description });
-                onClose();
+                mutateAsync({ projectName: name, description }).finally(() => {
+                  onClose();
+                });
               }}
               disabled={name === ""}
               isLoading={isLoading}
