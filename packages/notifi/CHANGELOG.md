@@ -1,5 +1,11 @@
 # @emilshr/notifi
 
+## 0.5.0
+
+### Minor Changes
+
+- bd7a44c: Adding support for excluding localhost/dev environments
+
 ## 0.4.0
 
 ### Minor Changes
