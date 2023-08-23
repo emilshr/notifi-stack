@@ -20,10 +20,6 @@ export default function Settings() {
     }
   }, [isFetched, data, push]);
 
-  if (!data) {
-    return <></>;
-  }
-
   return (
     <SidePaneWrapper>
       <SectionHeader

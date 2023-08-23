@@ -8,13 +8,20 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import { SkeletonIndicator } from "../CustomSkeleton";
 
 type Props = {
-  project: Project;
+  project: Project | undefined | null;
   loading: boolean;
 };
 
 export const GeneralSettings = ({ project, loading }: Props) => {
-  const [name, setName] = useState(project.name);
-  const [description, setDescription] = useState(project.description);
+  const {
+    name: projectName = "",
+    description: projectDescription = "",
+    id = "",
+  } = project || {};
+
+  const [name, setName] = useState(projectName);
+  const [description, setDescription] = useState(projectDescription);
+
   const { isLoading, mutate } = api.projects.updateProject.useMutation({
     onSuccess({ name, description }) {
       setName(name);
@@ -60,13 +67,12 @@ export const GeneralSettings = ({ project, loading }: Props) => {
               color="secondary"
               disabled={
                 isLoading ||
-                (project.name === name &&
-                  project.description === description) ||
+                (projectName === name && projectDescription === description) ||
                 !loading
               }
               isLoading={isLoading}
               onClick={() => {
-                mutate({ name, description, projectId: project.id });
+                mutate({ name, description, projectId: id });
               }}
             >
               Update
@@ -80,7 +86,7 @@ export const GeneralSettings = ({ project, loading }: Props) => {
       >
         <div className="flex justify-end">
           <SkeletonIndicator isLoaded={loading}>
-            <DeleteProject projectId={project.id} />
+            <DeleteProject projectId={id} />
           </SkeletonIndicator>
         </div>
       </ProjectSectionWrapper>
