@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const ProjectListing = () => {
-  const { data, isFetching } = api.projects.getProjects.useQuery({}, {});
+  const { data, isFetching } = api.projects.getProjects.useQuery({});
 
   if (isFetching) {
     return (

@@ -9,7 +9,10 @@ const ProjectModal = dynamic(() => import("./CreateNewProjectModal"));
 export const CreateNewProject = () => {
   const [open, setOpen] = useState(false);
 
-  const { data, isFetching } = api.projects.canUserCreateProjects.useQuery();
+  const { data, isFetching } = api.projects.canUserCreateProjects.useQuery(
+    undefined,
+    { refetchOnWindowFocus: false },
+  );
 
   return (
     <div className="flex flex-col gap-y-4">
