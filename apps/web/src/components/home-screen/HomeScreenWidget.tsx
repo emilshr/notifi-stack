@@ -60,7 +60,7 @@ export const HomeScreenWidget = () => {
               Sign in to get started
             </Button>
           )}
-          <a href="https://www.docs.notifi.com" target="_blank">
+          <a href="https://www.docs.notifi.site" target="_blank">
             <Button
               size="lg"
               color="default"
