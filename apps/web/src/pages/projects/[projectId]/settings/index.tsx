@@ -8,11 +8,17 @@ import { useEffect } from "react";
 export default function Settings() {
   const {
     query: { projectId },
+    isReady,
     push,
   } = useRouter();
-  const { data, isFetched } = api.projects.getProject.useQuery({
-    projectId: projectId as string,
-  });
+  const { data, isFetched } = api.projects.getProject.useQuery(
+    {
+      projectId: projectId as string,
+    },
+    { enabled: isReady },
+  );
+
+  console.log({ data, projectId });
 
   useEffect(() => {
     if (isFetched && !data) {
