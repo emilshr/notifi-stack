@@ -8,6 +8,7 @@ import {
 import GithubProvider from "next-auth/providers/github";
 import { env } from "@/env.mjs";
 import { prisma } from "./db";
+import { PlanType } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -19,7 +20,19 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      planType: PlanType;
     };
+  }
+
+  interface Account {
+    planType: PlanType;
+  }
+}
+
+declare module "next-auth/jwt" {
+  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
+  interface JWT {
+    planType: PlanType;
   }
 }
 
@@ -30,13 +43,24 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.sub,
+          planType: token.planType,
+        },
+      };
+    },
+    jwt({ account, token }) {
+      if (account) {
+        token.planType = account.planType;
+      } else {
+        token.planType = PlanType.HOBBY;
+      }
+      return token;
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -54,6 +78,9 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**

@@ -148,3 +148,19 @@ export const paginatedPublicProcedure =
 export const offsetPaginatedPrivateProcedure = protectedProcedure.input(
   offsetPaginationInputSchema,
 );
+
+export const premiumProcedure = protectedProcedure.use(
+  async ({
+    ctx: {
+      session: { user },
+      prisma,
+    },
+    next,
+  }) => {
+    // const foundUser = await prisma.user.findFirst({ where: { id: user.id } });
+    // if (!foundUser || foundUser.planType === PlanType.HOBBY) {
+    //   throw new TRPCError({ code: "FORBIDDEN" });
+    // }
+    return next();
+  },
+);

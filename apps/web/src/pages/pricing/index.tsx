@@ -1,7 +1,7 @@
 import { AlertBanner } from "@/components/AlertBanner";
-import { AnnouncementBanner } from "@/components/AnnouncementBanner";
 import { CommonPaddingWrapper } from "@/components/CommonPaddingWrapper";
 import {
+  Button,
   Card,
   CardBody,
   CardFooter,
@@ -14,7 +14,7 @@ const FreeTierCard = () => {
     <Card
       radius="md"
       classNames={{
-        base: "ring-1 ring-secondary-500 ring-offset-2 ring-offset-transparent rounded-md gap-y-4 p-2",
+        base: "hover:ring-1 ring-secondary-500 ring-offset-2 ring-offset-transparent rounded-md gap-y-4 p-2",
         header: "text-3xl font-extrabold text-secondary-800",
         body: "p-3 text-base font-normal",
       }}
@@ -35,7 +35,7 @@ const FreeTierCard = () => {
         <div className="flex flex-col gap-y-2">
           <ul className="list-disc pl-4 text-secondary-700">
             <li>
-              <span>5 free projects</span>
+              <span>3 free projects</span>
             </li>
             <li>
               <span>
@@ -62,7 +62,7 @@ const PaidTierCard = () => {
     <Card
       radius="md"
       classNames={{
-        base: "rounded-md gap-y-4 p-2",
+        base: "hover:ring-1 ring-secondary-500 ring-offset-2 ring-offset-transparent rounded-md gap-y-4 p-2",
         header: "text-3xl font-extrabold text-primary-800",
         body: "p-3 text-base font-normal",
       }}
@@ -73,7 +73,7 @@ const PaidTierCard = () => {
           <span className="text-base font-normal text-default-700">
             For developers who have multiple projects hosted everywhere
           </span>
-          <span className="pt-4 text-5xl">30$ yearly</span>
+          <span className="pt-4 text-5xl">21.6$ yearly</span>
         </div>
       </CardHeader>
       <div className="px-3">
@@ -101,7 +101,9 @@ const PaidTierCard = () => {
         </div>
       </CardBody>
       <CardFooter>
-        <AnnouncementBanner title="Will be available soon" />
+        <Button fullWidth variant="shadow" color="success">
+          Upgrade now
+        </Button>
       </CardFooter>
     </Card>
   );

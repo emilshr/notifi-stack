@@ -243,10 +243,11 @@ export const projectsRouter = createTRPCRouter({
       ctx: {
         prisma,
         session: {
-          user: { id },
+          user: { id, planType },
         },
       },
     }) => {
+      console.log("Currently on %s tier", planType);
       const count = await prisma.project.count({ where: { userId: id } });
       return count < PROJECT_COUNT_LIMIT;
     },
