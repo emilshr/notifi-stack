@@ -24,7 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <NextUIProvider>
       <ThemeProvider attribute="class" defaultTheme="dark">
-        <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus={false} refetchWhenOffline={false}>
           <main className="text-foreground">
             <NextTopLoader />
             <style jsx global>{`
