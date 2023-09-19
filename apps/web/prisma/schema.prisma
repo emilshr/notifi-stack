@@ -14,12 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-}
-
 enum PlanType {
     HOBBY
     PREMIUM
@@ -27,25 +21,36 @@ enum PlanType {
 
 // Necessary for Next auth
 model Account {
-    id                       String   @id @default(cuid())
+    id                       String  @id @default(cuid())
     userId                   String
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
+    refresh_token            String? @db.Text
+    access_token             String? @db.Text
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String? @db.Text
     session_state            String?
     refresh_token_expires_in Int?
-    planType                 PlanType @default(HOBBY)
 
-    user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    Project Project[]
+    user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Project       Project[]
+    Orders        Orders?   @relation(fields: [ordersOrderId], references: [orderId])
+    ordersOrderId String?
 
     @@unique([provider, providerAccountId])
+}
+
+model Orders {
+    orderId          String @id @unique
+    userId           String @unique
+    paymentId        String @unique
+    paymentSignature String
+
+    user    User      @relation(fields: [userId], references: [id])
+    Account Account[]
 }
 
 model Session {
@@ -62,9 +67,13 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
-    accounts      Account[]
-    sessions      Session[]
-    Project       Project[]
+
+    planType PlanType @default(HOBBY)
+
+    accounts Account[]
+    sessions Session[]
+    Project  Project[]
+    Orders   Orders?
 }
 
 model VerificationToken {
@@ -76,19 +85,22 @@ model VerificationToken {
 }
 
 model Project {
-    id             String           @id @default(cuid())
-    name           String
-    description    String
-    userId         String
-    backgroundUrl  String
-    createdAt      DateTime         @default(now())
-    updatedAt      DateTime         @updatedAt
-    accountId      String?
-    user           User             @relation(fields: [userId], references: [id])
-    Account        Account?         @relation(fields: [accountId], references: [id])
+    id            String   @id @default(cuid())
+    name          String
+    description   String
+    userId        String
+    backgroundUrl String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    user User @relation(fields: [userId], references: [id])
+
     ProjectApiKeys ProjectApiKeys[]
     ErrorLogs      ErrorLogs[]
     ProjectSecrets ProjectSecrets?
+
+    Account   Account? @relation(fields: [accountId], references: [id])
+    accountId String?
 }
 
 model ProjectSecrets {

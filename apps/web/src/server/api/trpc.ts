@@ -18,6 +18,7 @@ import {
   offsetPaginationInputSchema,
   paginatedInputSchema,
 } from "@/common/zodSchema";
+import { PlanType } from "@prisma/client";
 
 /**
  * 1. CONTEXT
@@ -149,18 +150,19 @@ export const offsetPaginatedPrivateProcedure = protectedProcedure.input(
   offsetPaginationInputSchema,
 );
 
-export const premiumProcedure = protectedProcedure.use(
+export const premiumAccountProcedure = protectedProcedure.use(
   async ({
     ctx: {
-      session: { user },
-      prisma,
+      session: {
+        user: { planType },
+      },
     },
     next,
   }) => {
-    // const foundUser = await prisma.user.findFirst({ where: { id: user.id } });
-    // if (!foundUser || foundUser.planType === PlanType.HOBBY) {
-    //   throw new TRPCError({ code: "FORBIDDEN" });
-    // }
+    if (planType === PlanType.HOBBY) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
     return next();
   },
 );

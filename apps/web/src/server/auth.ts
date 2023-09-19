@@ -23,15 +23,7 @@ declare module "next-auth" {
       planType: PlanType;
     };
   }
-
-  interface Account {
-    planType: PlanType;
-  }
-}
-
-declare module "next-auth/jwt" {
-  /** Returned by the `jwt` callback and `getToken`, when using JWT sessions */
-  interface JWT {
+  interface User {
     planType: PlanType;
   }
 }
@@ -43,23 +35,15 @@ declare module "next-auth/jwt" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, token }) => {
+    session: ({ session, user }) => {
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.sub,
-          planType: token.planType,
+          id: user.id,
+          planType: user.planType,
         },
       };
-    },
-    jwt({ account, token }) {
-      if (account) {
-        token.planType = account.planType;
-      } else {
-        token.planType = PlanType.HOBBY;
-      }
-      return token;
     },
   },
   adapter: PrismaAdapter(prisma),
@@ -79,7 +63,7 @@ export const authOptions: NextAuthOptions = {
      */
   ],
   session: {
-    strategy: "jwt",
+    strategy: "database",
   },
 };
 
