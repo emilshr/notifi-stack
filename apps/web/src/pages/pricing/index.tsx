@@ -1,6 +1,5 @@
 import { CommonPaddingWrapper } from "@/components/CommonPaddingWrapper";
-import { FreeTierCard } from "@/components/pricing/FreeTierCard";
-import { PaidTierCard } from "@/components/pricing/PaidTierCard";
+import { Listing } from "@/components/pricing/Listing";
 
 export default function Page() {
   return (
@@ -12,10 +11,7 @@ export default function Page() {
             Plans that empower you to ship without friction.
           </span>
         </div>
-        <div className="grid h-full grid-cols-1 items-center justify-center gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-y-0">
-          <FreeTierCard />
-          <PaidTierCard />
-        </div>
+        <Listing />
       </div>
     </CommonPaddingWrapper>
   );

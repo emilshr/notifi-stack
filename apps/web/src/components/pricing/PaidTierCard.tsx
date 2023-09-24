@@ -9,10 +9,20 @@ import {
 } from "@nextui-org/react";
 import { PlanType } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import type { PricingVariants } from "./types";
+import { useMemo } from "react";
 
-export const PaidTierCard = () => {
+type Props = {
+  variant: PricingVariants;
+};
+
+export const PaidTierCard = ({ variant }: Props) => {
   const { mutate, isLoading } = api.account.upgradeAccount.useMutation();
   const { data } = useSession();
+
+  const price = useMemo(() => {
+    return variant === "Monthly" ? "5$" : "50$";
+  }, [variant]);
 
   return (
     <Card
@@ -33,7 +43,7 @@ export const PaidTierCard = () => {
           <span className="text-base font-normal text-default-700">
             For developers who have multiple projects hosted everywhere
           </span>
-          <span className="pt-4 text-5xl">21.6$ yearly</span>
+          <span className="pt-4 text-5xl">{price}</span>
         </div>
       </CardHeader>
       <div className="px-3">
