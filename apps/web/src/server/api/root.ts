@@ -2,6 +2,7 @@ import { createTRPCRouter as PackageHelper } from "@/server/api/trpc";
 import { projectsRouter } from "./routers/projects";
 import { packageRoutes } from "./routers/package.routes";
 import { createPackageTRPCRouter } from "./package-trpc";
+import { accountRouter } from "./routers/account";
 
 /**
  * This is the primary router for your server.
@@ -10,6 +11,7 @@ import { createPackageTRPCRouter } from "./package-trpc";
  */
 export const appRouter = PackageHelper({
   projects: projectsRouter,
+  account: accountRouter,
 });
 
 // export type definition of API

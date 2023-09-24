@@ -11,6 +11,7 @@ import {
 } from "@/services/sign-hash.service";
 import { TRPCError } from "@trpc/server";
 import { getRandomBackgroundUrl } from "@/common/background-generator";
+import { PlanType } from "@prisma/client";
 
 const API_TEMPLATE = "NOTIFI-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const PROJECT_COUNT_LIMIT = 3;
@@ -243,12 +244,15 @@ export const projectsRouter = createTRPCRouter({
       ctx: {
         prisma,
         session: {
-          user: { id },
+          user: { id, planType },
         },
       },
     }) => {
-      const count = await prisma.project.count({ where: { userId: id } });
-      return count < PROJECT_COUNT_LIMIT;
+      if (planType === PlanType.HOBBY) {
+        const count = await prisma.project.count({ where: { userId: id } });
+        return count < PROJECT_COUNT_LIMIT;
+      }
+      return true;
     },
   ),
 });

@@ -8,6 +8,7 @@ import {
 import GithubProvider from "next-auth/providers/github";
 import { env } from "@/env.mjs";
 import { prisma } from "./db";
+import { PlanType } from "@prisma/client";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -19,7 +20,11 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
+      planType: PlanType;
     };
+  }
+  interface User {
+    planType: PlanType;
   }
 }
 
@@ -30,13 +35,16 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id,
+          planType: user.planType,
+        },
+      };
+    },
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -54,6 +62,9 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  session: {
+    strategy: "database",
+  },
 };
 
 /**
