@@ -29,7 +29,9 @@
         "SKIP_ENV_VALIDATION",
         "VERCEL_URL",
         "VERCEL",
-        "PORT"
+        "PORT",
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET"
       ]
     },
     "lint": {},
@@ -45,7 +47,9 @@
         "GITHUB_CLIENT_SECRET",
         "NODE_ENV",
         "PORT",
-        "NEXT_PUBLIC_*"
+        "NEXT_PUBLIC_*",
+        "RAZORPAY_KEY_ID",
+        "RAZORPAY_KEY_SECRET"
       ]
     },
     "update-schema": {

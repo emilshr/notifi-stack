@@ -18,6 +18,7 @@ import {
   offsetPaginationInputSchema,
   paginatedInputSchema,
 } from "@/common/zodSchema";
+import { PlanType } from "@prisma/client";
 
 /**
  * 1. CONTEXT
@@ -147,4 +148,21 @@ export const paginatedPublicProcedure =
 
 export const offsetPaginatedPrivateProcedure = protectedProcedure.input(
   offsetPaginationInputSchema,
+);
+
+export const premiumAccountProcedure = protectedProcedure.use(
+  async ({
+    ctx: {
+      session: {
+        user: { planType },
+      },
+    },
+    next,
+  }) => {
+    if (planType === PlanType.HOBBY) {
+      throw new TRPCError({ code: "FORBIDDEN" });
+    }
+
+    return next();
+  },
 );

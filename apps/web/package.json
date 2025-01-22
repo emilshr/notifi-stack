@@ -10,7 +10,8 @@
     "start": "next start",
     "setup-db": "prisma generate && prisma db push",
     "type-check": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "studio": "npx prisma studio"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.15",
